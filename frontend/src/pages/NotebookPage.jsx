@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getNotebook, updateNotebook } from '../services/notebookService';
 import UploadModal from '../components/UploadModal';
 import DocumentList from '../components/DocumentList';
+import EnterContentModal from '../components/EnterContentModal';
 
 function NotebookPage() {
   const { id } = useParams();
@@ -14,6 +15,7 @@ function NotebookPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isEnterContentModalOpen, setIsEnterContentModalOpen] = useState(false);
   const [documentListChanged, setDocumentListChanged] = useState(0);
 
   useEffect(() => {
@@ -59,8 +61,18 @@ function NotebookPage() {
     setIsUploadModalOpen(true);
   };
 
+  const handleEnterContentClick = () => {
+    setIsEnterContentModalOpen(true);
+  };
+
   const handleUploadSuccess = () => {
     setDocumentListChanged(prev => prev + 1);
+    setIsUploadModalOpen(false);
+  };
+
+  const handleSaveTextSuccess = () => {
+    setDocumentListChanged(prev => prev + 1);
+    setIsEnterContentModalOpen(false);
   };
 
   const formatDate = (dateString) => {
@@ -165,6 +177,10 @@ function NotebookPage() {
             <span className="tool-icon">📄</span>
             <span className="tool-label">Upload PDF</span>
           </button>
+          <button className="tool-btn text-entry-btn" onClick={handleEnterContentClick}>
+            <span className="tool-icon">✏️</span>
+            <span className="tool-label">Enter Content</span>
+          </button>
           <button className="tool-btn flashcards-btn">
             <span className="tool-icon">🔍</span>
             <span className="tool-label">Generate Flashcards</span>
@@ -191,6 +207,13 @@ function NotebookPage() {
           isOpen={isUploadModalOpen} 
           onClose={() => setIsUploadModalOpen(false)}
           onUploadSuccess={handleUploadSuccess}
+        />
+        
+        <EnterContentModal 
+          notebookId={id}
+          isOpen={isEnterContentModalOpen}
+          onClose={() => setIsEnterContentModalOpen(false)}
+          onSaveSuccess={handleSaveTextSuccess}
         />
       </div>
     </div>

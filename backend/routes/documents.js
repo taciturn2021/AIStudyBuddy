@@ -8,7 +8,8 @@ const {
   uploadDocument, 
   getDocuments, 
   getDocument, 
-  deleteDocument 
+  deleteDocument,
+  saveTextDocument
 } = require('../controllers/documentController');
 
 const storage = multer.diskStorage({
@@ -38,6 +39,8 @@ const upload = multer({
 });
 
 router.post('/:notebookId', protect, upload.single('document'), uploadDocument);
+
+router.post('/:notebookId/text', protect, saveTextDocument);
 
 router.get('/:notebookId', protect, getDocuments);
 
