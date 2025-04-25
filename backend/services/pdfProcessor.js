@@ -17,12 +17,11 @@ async function processPdf(filePath, documentId) {
 
     console.log(`[PDF Processor] Extracted ${extractedText.length} characters, ${numPages} pages for document: ${documentId}`);
 
-    // Update the document in the database
     await Document.findByIdAndUpdate(documentId, {
       processed: true,
       'content.text': extractedText,
       'content.pages': numPages,
-      processingError: null, // Clear any previous error
+      processingError: null,
     });
 
     console.log(`[PDF Processor] Successfully processed and updated document: ${documentId}`);
@@ -30,10 +29,9 @@ async function processPdf(filePath, documentId) {
   } catch (error) {
     console.error(`[PDF Processor] Error processing document ${documentId}:`, error);
     
-    // Attempt to update the document with the error
     try {
       await Document.findByIdAndUpdate(documentId, {
-        processed: false, // Mark as not processed due to error
+        processed: false,
         processingError: error.message || 'Unknown processing error',
       });
       console.log(`[PDF Processor] Updated document ${documentId} with processing error.`);

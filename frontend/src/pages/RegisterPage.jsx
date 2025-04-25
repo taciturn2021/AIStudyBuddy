@@ -10,8 +10,8 @@ function RegisterPage() {
   const [showKeyConfirmation, setShowKeyConfirmation] = useState(false);
   const [enteredKey, setEnteredKey] = useState('');
   const [keyConfirmationError, setKeyConfirmationError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Loading state for registration
-  const [isConfirming, setIsConfirming] = useState(false); // Loading state for confirmation
+  const [isLoading, setIsLoading] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ function RegisterPage() {
     setSecretKey(null);
     setShowKeyConfirmation(false);
     setKeyConfirmationError('');
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/register', {
@@ -29,11 +29,10 @@ function RegisterPage() {
         password,
       });
       
-      // Small delay for better UX
       setTimeout(() => {
         setIsLoading(false);
         setSecretKey(response.data.resetKey);
-        setShowKeyConfirmation(true); // Show the confirmation step
+        setShowKeyConfirmation(true);
       }, 600);
       
     } catch (err) {
@@ -48,10 +47,8 @@ function RegisterPage() {
     setKeyConfirmationError('');
     setIsConfirming(true);
     
-    // Small delay to verify the key (simulating an API call)
     setTimeout(() => {
       if (enteredKey === secretKey) {
-        // Confirmation successful, navigate to login
         navigate('/login'); 
       } else {
         setIsConfirming(false);
@@ -62,7 +59,6 @@ function RegisterPage() {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(secretKey);
-    // Visual indication that the copy was successful
     const keyDisplay = document.querySelector('.secret-key-display');
     keyDisplay.classList.add('copied');
     setTimeout(() => keyDisplay.classList.remove('copied'), 1000);

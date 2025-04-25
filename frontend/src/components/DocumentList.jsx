@@ -32,7 +32,6 @@ function DocumentList({ notebookId, documentListChanged }) {
   const handleConfirmDelete = async (documentId) => {
     try {
       await deleteDocument(notebookId, documentId);
-      // Remove deleted document from state
       setDocuments(documents.filter(doc => doc._id !== documentId));
       setDeleteConfirmation(null);
     } catch (err) {
@@ -120,15 +119,6 @@ function DocumentList({ notebookId, documentListChanged }) {
                 </div>
               ) : (
                 <>
-                  {/* Remove the View button */}
-                  {/* 
-                  <button 
-                    className="btn-view" 
-                    title="View Document"
-                  >
-                    View
-                  </button>
-                  */}
                   <button 
                     className="btn-delete" 
                     onClick={() => handleDeleteClick(doc._id)}

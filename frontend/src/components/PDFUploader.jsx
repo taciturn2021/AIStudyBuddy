@@ -35,18 +35,15 @@ function PDFUploader({ notebookId, onUploadSuccess, onUploadError }) {
   const validateAndSetFile = (selectedFile) => {
     setError('');
     
-    // Check if a file was selected
     if (!selectedFile) {
       return;
     }
     
-    // Check file type
     if (selectedFile.type !== 'application/pdf') {
       setError('Only PDF files are allowed');
       return;
     }
     
-    // Check file size (10MB limit)
     if (selectedFile.size > 10 * 1024 * 1024) {
       setError('File size exceeds 10MB limit');
       return;
@@ -65,7 +62,6 @@ function PDFUploader({ notebookId, onUploadSuccess, onUploadError }) {
     setProgress(0);
     
     try {
-      // Simulate progress
       const progressInterval = setInterval(() => {
         setProgress(prevProgress => {
           const newProgress = prevProgress + 10;
@@ -73,18 +69,14 @@ function PDFUploader({ notebookId, onUploadSuccess, onUploadError }) {
         });
       }, 300);
       
-      // Upload the file
       const response = await uploadDocument(notebookId, file);
       
-      // Clear progress simulation
       clearInterval(progressInterval);
       setProgress(100);
       
-      // Reset form
       setFile(null);
       setIsUploading(false);
       
-      // Call success callback
       if (onUploadSuccess) {
         onUploadSuccess(response.data);
       }
@@ -93,10 +85,8 @@ function PDFUploader({ notebookId, onUploadSuccess, onUploadError }) {
       setIsUploading(false);
       setProgress(0);
       
-      // Set error message
       setError(err.response?.data?.message || 'Failed to upload file');
       
-      // Call error callback
       if (onUploadError) {
         onUploadError(err);
       }

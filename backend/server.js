@@ -1,32 +1,28 @@
-// Main server file for AI Study Buddy backend
+require('dotenv').config();
+
+console.log('Attempting to load GEMINI_KEY_ENCRYPTION_SECRET:', process.env.GEMINI_KEY_ENCRYPTION_SECRET ? 'Loaded (length ' + process.env.GEMINI_KEY_ENCRYPTION_SECRET.length + ')' : 'NOT LOADED OR UNDEFINED');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const path = require('path');
-const cron = require('node-cron'); // Import node-cron
-const { retryUnprocessedPdfs, ensureSchemaFields } = require('./jobs/pdfRetryProcessor'); // Import the job
+const cron = require('node-cron');
+const { retryUnprocessedPdfs, ensureSchemaFields } = require('./jobs/pdfRetryProcessor');
+const accountRoutes = require('./routes/account');
+const { errorHandler } = require('./middleware/errorMiddleware');
 
-// Load environment variables
-dotenv.config();
-
-// Initialize express app
 const app = express();
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// Create uploads directory if it doesn't exist
 const fs = require('fs');
 if (!fs.existsSync('./backend/uploads')) {
   fs.mkdirSync('./backend/uploads', { recursive: true });
 }
 
-// Routes
 const authRoutes = require('./routes/auth');
 const notebookRoutes = require('./routes/notebooks');
 const documentRoutes = require('./routes/documents');
@@ -34,16 +30,16 @@ const documentRoutes = require('./routes/documents');
 app.use('/api/auth', authRoutes);
 app.use('/api/notebooks', notebookRoutes);
 app.use('/api/documents', documentRoutes);
+app.use('/api/account', accountRoutes);
 
-// Basic route for testing
 app.get('/', (req, res) => {
   res.send('AI Study Buddy API is running!');
 });
 
-// Flag to prevent job overlap
+app.use(errorHandler);
+
 let isRetryJobRunning = false;
 
-// Connect to MongoDB and start server
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/aistudybuddy';
 
@@ -56,21 +52,20 @@ mongoose
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
 
-      // Schedule the retry job to run every 2 minutes
-      cron.schedule('*/2 * * * *', async () => { // Make the callback async
+      cron.schedule('*/2 * * * *', async () => {
         if (isRetryJobRunning) {
           console.log('[Cron] PDF processing retry job is already running. Skipping this execution.');
           return;
         }
 
         console.log('[Cron] Running scheduled PDF processing retry job...');
-        isRetryJobRunning = true; // Set lock
+        isRetryJobRunning = true;
         try {
-          await retryUnprocessedPdfs(); // Await the async job
+          await retryUnprocessedPdfs();
         } catch (error) {
             console.error('[Cron] Error executing retryUnprocessedPdfs job:', error);
         } finally {
-          isRetryJobRunning = false; // Release lock regardless of outcome
+          isRetryJobRunning = false;
           console.log('[Cron] PDF processing retry job finished.');
         }
       });

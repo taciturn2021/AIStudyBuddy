@@ -5,13 +5,11 @@ import { Link, useNavigate } from 'react-router-dom';
 function ForgotPasswordPage() {
   const navigate = useNavigate();
   
-  // Form states
   const [username, setUsername] = useState('');
   const [resetKey, setResetKey] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   
-  // UI states
   const [step, setStep] = useState(1);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,30 +19,24 @@ function ForgotPasswordPage() {
   const [passwordFeedback, setPasswordFeedback] = useState('');
   const [debugInfo, setDebugInfo] = useState(null);
   
-  // Calculate password strength
   const calculatePasswordStrength = (password) => {
     if (!password) return { score: 0, feedback: '' };
     
     let score = 0;
     let feedback = '';
     
-    // Length check
     if (password.length >= 12) {
       score += 2;
     } else if (password.length >= 8) {
       score += 1;
     }
     
-    // Check for numbers
     if (/\d/.test(password)) score += 1;
     
-    // Check for special characters
     if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
     
-    // Check for uppercase and lowercase
     if (/[A-Z]/.test(password) && /[a-z]/.test(password)) score += 1;
     
-    // Provide feedback based on score
     if (score < 2) {
       feedback = 'Weak: Try adding numbers, special characters, and mixing case';
     } else if (score < 4) {
@@ -56,14 +48,12 @@ function ForgotPasswordPage() {
     return { score, feedback };
   };
   
-  // Update password strength when password changes
   useEffect(() => {
     const { score, feedback } = calculatePasswordStrength(newPassword);
     setPasswordStrength(score);
     setPasswordFeedback(feedback);
   }, [newPassword]);
   
-  // Step 1: Find account with username
   const handleFindAccount = async (e) => {
     e.preventDefault();
     setError('');
@@ -79,17 +69,14 @@ function ForgotPasswordPage() {
     try {
       console.log('Sending request to check username:', username);
       
-      // Check if username exists
       const response = await axios.post('http://localhost:5000/api/auth/check-username', {
-        username: username.trim() // Ensure we trim any whitespace
+        username: username.trim()
       });
       
       console.log('Username check response:', response.data);
       
-      // Store the verified username
       setFoundUsername(username.trim());
       
-      // If username exists, proceed to next step
       setTimeout(() => {
         setIsLoading(false);
         setStep(2);
@@ -99,7 +86,6 @@ function ForgotPasswordPage() {
       
       console.error('Username check error:', err);
       
-      // Save debug info
       setDebugInfo({
         errorMessage: err.message,
         statusCode: err.response?.status,
@@ -107,7 +93,6 @@ function ForgotPasswordPage() {
         requestData: { username: username.trim() }
       });
       
-      // Check for specific error codes
       if (err.response && err.response.status === 404) {
         setError('No account found with this username. Please check and try again.');
       } else if (err.response) {
@@ -120,13 +105,11 @@ function ForgotPasswordPage() {
     }
   };
   
-  // Step 2: Verify reset key and set new password
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setError('');
     setDebugInfo(null);
     
-    // Validate inputs
     if (!resetKey.trim()) {
       setError('Please enter your secret reset key');
       return;
@@ -158,27 +141,22 @@ function ForgotPasswordPage() {
       console.log('Sending password reset request for user:', foundUsername);
       
       const response = await axios.post('http://localhost:5000/api/auth/resetpassword', {
-        username: foundUsername, // Use the verified username
+        username: foundUsername,
         resetKey: resetKey.trim(),
         newPassword
       });
       
       console.log('Password reset response:', response.data);
       
-      // Set success UI
       setTimeout(() => {
         setIsLoading(false);
         setResetSuccess(true);
         
-        // Store new token if provided
         if (response.data && response.data.token) {
           localStorage.setItem('token', response.data.token);
         }
         
-        // Store new reset key if needed
         if (response.data && response.data.resetKey) {
-          // You could handle the new key here, e.g., display it to the user
-          // or save it securely
         }
       }, 600);
     } catch (err) {
@@ -186,7 +164,6 @@ function ForgotPasswordPage() {
       
       console.error('Password reset error:', err);
       
-      // Save debug info
       setDebugInfo({
         errorMessage: err.message,
         statusCode: err.response?.status,
@@ -206,7 +183,6 @@ function ForgotPasswordPage() {
     }
   };
   
-  // If password reset was successful
   if (resetSuccess) {
     return (
       <div className="auth-container password-reset-container">
@@ -227,7 +203,6 @@ function ForgotPasswordPage() {
     <div className="auth-container password-reset-container">
       <h2>Reset Your Password</h2>
       
-      {/* Step 1: Enter username */}
       {step === 1 && (
         <>
           <p className="reset-info">
@@ -248,33 +223,25 @@ function ForgotPasswordPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 disabled={isLoading}
                 required
-                autoFocus
               />
             </div>
             
-            {error && <p className="error-message">{error}</p>}
+            {error && <div className="error-message">{error}</div>}
             
-            {debugInfo && (
-              <div className="debug-info">
-                <details>
-                  <summary>Debug Information</summary>
-                  <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
-                </details>
-              </div>
-            )}
-            
-            <button type="submit" disabled={isLoading} className={isLoading ? 'loading' : ''}>
-              {isLoading ? 'Processing...' : 'Continue'}
+            <button type="submit" disabled={isLoading} className={`form-btn-submit ${isLoading ? 'loading' : ''}`}>
+              {isLoading ? 'Finding Account...' : 'Find Account'}
             </button>
           </form>
         </>
       )}
       
-      {/* Step 2: Enter reset key and new password */}
       {step === 2 && (
         <>
           <p className="reset-info">
-            Enter your secret reset key and choose a new password for <strong>{foundUsername}</strong>.
+            Account found for <strong>{foundUsername}</strong>.
+          </p>
+          <p className="reset-info">
+            Enter your secret reset key and set a new password.
           </p>
           
           <form onSubmit={handleResetPassword} className="auth-form">
@@ -287,7 +254,6 @@ function ForgotPasswordPage() {
                 onChange={(e) => setResetKey(e.target.value)}
                 disabled={isLoading}
                 required
-                autoFocus
               />
             </div>
             
@@ -301,17 +267,12 @@ function ForgotPasswordPage() {
                 disabled={isLoading}
                 required
               />
-              {newPassword && (
-                <div className={`password-strength strength-${passwordStrength}`}>
-                  <div className="strength-meter">
-                    <div 
-                      className="strength-meter-fill" 
-                      style={{width: `${Math.min(100, passwordStrength * 20)}%`}}
-                    ></div>
-                  </div>
-                  <div className="strength-text">{passwordFeedback}</div>
-                </div>
-              )}
+              <div className={`password-strength-meter strength-${passwordStrength}`}>
+                <div className="strength-bar"></div>
+              </div>
+              <div className="password-feedback">
+                {passwordFeedback}
+              </div>
             </div>
             
             <div className="form-group">
@@ -326,31 +287,29 @@ function ForgotPasswordPage() {
               />
             </div>
             
-            {error && <p className="error-message">{error}</p>}
+            {error && <div className="error-message">{error}</div>}
             
-            {debugInfo && (
-              <div className="debug-info">
-                <details>
-                  <summary>Debug Information</summary>
-                  <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
-                </details>
-              </div>
-            )}
-            
-            <button 
-              type="submit" 
-              disabled={isLoading || newPassword !== confirmPassword || passwordStrength < 2} 
-              className={isLoading ? 'loading' : ''}
-            >
+            <button type="submit" disabled={isLoading} className={`form-btn-submit ${isLoading ? 'loading' : ''}`}>
               {isLoading ? 'Resetting Password...' : 'Reset Password'}
             </button>
           </form>
         </>
       )}
       
-      <Link to="/login" className="back-link">Back to Login</Link>
+      {debugInfo && (
+        <div className="debug-info">
+          <h4>Debug Information</h4>
+          <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+        </div>
+      )}
+      
+      <div className="auth-links">
+        <p>
+          <Link to="/login">Back to Login</Link>
+        </p>
+      </div>
     </div>
   );
 }
 
-export default ForgotPasswordPage; 
+export default ForgotPasswordPage;

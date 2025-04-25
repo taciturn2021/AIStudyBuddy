@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// API URL for documents
 const API_URL = 'http://localhost:5000/api/documents';
 
-// Create axios instance with auth header
 const axiosInstance = () => {
   const token = localStorage.getItem('token');
   return axios.create({
@@ -14,7 +12,6 @@ const axiosInstance = () => {
   });
 };
 
-// Get all documents in a notebook
 export const getDocuments = async (notebookId) => {
   try {
     const response = await axiosInstance().get(`/${notebookId}`);
@@ -25,7 +22,6 @@ export const getDocuments = async (notebookId) => {
   }
 };
 
-// Get a specific document
 export const getDocument = async (notebookId, documentId) => {
   try {
     const response = await axiosInstance().get(`/${notebookId}/${documentId}`);
@@ -36,14 +32,11 @@ export const getDocument = async (notebookId, documentId) => {
   }
 };
 
-// Upload a document to a notebook
 export const uploadDocument = async (notebookId, file) => {
   try {
-    // Create form data for file upload
     const formData = new FormData();
     formData.append('document', file);
 
-    // Custom axios instance for multipart form data
     const token = localStorage.getItem('token');
     const response = await axios.post(
       `${API_URL}/${notebookId}`, 
@@ -63,7 +56,6 @@ export const uploadDocument = async (notebookId, file) => {
   }
 };
 
-// Delete a document
 export const deleteDocument = async (notebookId, documentId) => {
   try {
     const response = await axiosInstance().delete(`/${notebookId}/${documentId}`);
@@ -72,4 +64,4 @@ export const deleteDocument = async (notebookId, documentId) => {
     console.error(`Error deleting document ${documentId}:`, error);
     throw error;
   }
-}; 
+};

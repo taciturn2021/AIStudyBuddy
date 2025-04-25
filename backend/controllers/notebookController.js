@@ -1,13 +1,11 @@
 const Notebook = require('../models/Notebook');
 
-// Create a new notebook
 exports.createNotebook = async (req, res) => {
   try {
     const { title, description } = req.body;
     
-    // Create new notebook
     const notebook = new Notebook({
-      user: req.user.id, // From auth middleware
+      user: req.user.id,
       title,
       description
     });
@@ -27,7 +25,6 @@ exports.createNotebook = async (req, res) => {
   }
 };
 
-// Get all notebooks for a user
 exports.getNotebooks = async (req, res) => {
   try {
     const notebooks = await Notebook.find({ user: req.user.id })
@@ -47,12 +44,10 @@ exports.getNotebooks = async (req, res) => {
   }
 };
 
-// Get a single notebook
 exports.getNotebook = async (req, res) => {
   try {
     const notebook = await Notebook.findById(req.params.id);
     
-    // Check if notebook exists
     if (!notebook) {
       return res.status(404).json({
         success: false,
@@ -60,7 +55,6 @@ exports.getNotebook = async (req, res) => {
       });
     }
     
-    // Make sure user owns the notebook
     if (notebook.user.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
@@ -75,7 +69,6 @@ exports.getNotebook = async (req, res) => {
   } catch (error) {
     console.error('Error fetching notebook:', error);
     
-    // Check if error is due to invalid ID
     if (error.kind === 'ObjectId') {
       return res.status(404).json({
         success: false,
@@ -90,14 +83,12 @@ exports.getNotebook = async (req, res) => {
   }
 };
 
-// Update a notebook
 exports.updateNotebook = async (req, res) => {
   try {
     const { title, description } = req.body;
     
     let notebook = await Notebook.findById(req.params.id);
     
-    // Check if notebook exists
     if (!notebook) {
       return res.status(404).json({
         success: false,
@@ -105,7 +96,6 @@ exports.updateNotebook = async (req, res) => {
       });
     }
     
-    // Make sure user owns the notebook
     if (notebook.user.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
@@ -113,7 +103,6 @@ exports.updateNotebook = async (req, res) => {
       });
     }
     
-    // Update fields
     notebook.title = title || notebook.title;
     notebook.description = description !== undefined ? description : notebook.description;
     notebook.lastUpdated = Date.now();
@@ -127,7 +116,6 @@ exports.updateNotebook = async (req, res) => {
   } catch (error) {
     console.error('Error updating notebook:', error);
     
-    // Check if error is due to invalid ID
     if (error.kind === 'ObjectId') {
       return res.status(404).json({
         success: false,
@@ -142,12 +130,10 @@ exports.updateNotebook = async (req, res) => {
   }
 };
 
-// Delete a notebook
 exports.deleteNotebook = async (req, res) => {
   try {
     const notebook = await Notebook.findById(req.params.id);
     
-    // Check if notebook exists
     if (!notebook) {
       return res.status(404).json({
         success: false,
@@ -155,7 +141,6 @@ exports.deleteNotebook = async (req, res) => {
       });
     }
     
-    // Make sure user owns the notebook
     if (notebook.user.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
@@ -172,7 +157,6 @@ exports.deleteNotebook = async (req, res) => {
   } catch (error) {
     console.error('Error deleting notebook:', error);
     
-    // Check if error is due to invalid ID
     if (error.kind === 'ObjectId') {
       return res.status(404).json({
         success: false,
@@ -185,4 +169,4 @@ exports.deleteNotebook = async (req, res) => {
       message: 'Server error'
     });
   }
-}; 
+};

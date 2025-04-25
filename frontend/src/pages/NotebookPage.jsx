@@ -17,13 +17,11 @@ function NotebookPage() {
   const [documentListChanged, setDocumentListChanged] = useState(0);
 
   useEffect(() => {
-    // Check if user is logged in
     if (!localStorage.getItem('token')) {
       navigate('/login');
       return;
     }
 
-    // Fetch notebook data
     const fetchNotebook = async () => {
       try {
         const response = await getNotebook(id);
@@ -62,7 +60,6 @@ function NotebookPage() {
   };
 
   const handleUploadSuccess = () => {
-    // Increment the counter to trigger a refresh of the document list
     setDocumentListChanged(prev => prev + 1);
   };
 
@@ -189,7 +186,6 @@ function NotebookPage() {
           />
         </div>
 
-        {/* Upload Modal */}
         <UploadModal 
           notebookId={id}
           isOpen={isUploadModalOpen} 

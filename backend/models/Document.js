@@ -55,7 +55,6 @@ const DocumentSchema = new mongoose.Schema({
     text: { type: String, default: null },
     pages: { type: Number, default: null }
   },
-  // This can be expanded for future AI processing results
   analysis: {
     type: mongoose.Schema.Types.Mixed,
     default: {}

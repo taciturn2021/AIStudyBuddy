@@ -6,30 +6,28 @@ function LoginPage() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Add loading state
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
 
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', {
         username,
         password,
       });
-      // Successful login - store token and redirect
       localStorage.setItem('token', response.data.token);
       
-      // Small delay for better UX
       setTimeout(() => {
         setIsLoading(false);
         navigate('/dashboard');
       }, 500);
       
     } catch (err) {
-      setIsLoading(false); // Stop loading on error
+      setIsLoading(false);
       setError(err.response?.data?.message || 'Login failed. Please try again.');
       console.error('Login error:', err);
     }

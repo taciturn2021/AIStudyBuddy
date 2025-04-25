@@ -24,8 +24,6 @@ const NotebookSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  // This will store the notebook content structure
-  // For now, it's a simple array, but can be expanded later
   content: {
     type: Array,
     default: []

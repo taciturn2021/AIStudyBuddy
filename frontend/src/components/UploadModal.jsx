@@ -9,7 +9,6 @@ function UploadModal({ notebookId, isOpen, onClose, onUploadSuccess }) {
       document.body.classList.remove('modal-open');
     }
 
-    // Cleanup function to ensure the class is removed when the component unmounts
     return () => {
       document.body.classList.remove('modal-open');
     };
@@ -25,7 +24,6 @@ function UploadModal({ notebookId, isOpen, onClose, onUploadSuccess }) {
   };
 
   const handleModalContentClick = (e) => {
-    // Prevent clicks inside modal content from closing the modal
     e.stopPropagation();
   };
 
@@ -40,7 +38,7 @@ function UploadModal({ notebookId, isOpen, onClose, onUploadSuccess }) {
           <PDFUploader 
             notebookId={notebookId} 
             onUploadSuccess={handleUploadSuccess}
-            onUploadError={() => {}} // We'll handle errors in the uploader itself
+            onUploadError={() => {}}
           />
         </div>
       </div>

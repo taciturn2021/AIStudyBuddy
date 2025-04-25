@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import NotebookList from '../components/NotebookList';
 import CreateNotebookForm from '../components/CreateNotebookForm';
 import { getNotebooks, createNotebook, deleteNotebook } from '../services/notebookService';
@@ -12,9 +12,7 @@ function DashboardPage() {
   const [error, setError] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
 
-  // Get a personalized greeting based on time of day
   useEffect(() => {
-    // Check if user is logged in
     if (!localStorage.getItem('token')) {
       navigate('/login');
       return;
@@ -27,7 +25,6 @@ function DashboardPage() {
       return "Good evening";
     };
     
-    // Fetch notebooks
     const fetchNotebooks = async () => {
       try {
         const response = await getNotebooks();
@@ -72,7 +69,6 @@ function DashboardPage() {
   };
 
   const handleLogout = () => {
-    // Add slight delay for better UX
     setIsLoading(true);
     setTimeout(() => {
       localStorage.removeItem('token');
@@ -95,9 +91,14 @@ function DashboardPage() {
     <div className="dashboard-container">
       <div className="dashboard-header">
         <h1>AI Study Buddy</h1>
-        <button onClick={handleLogout} className="header-logout-btn">
-          Logout
-        </button>
+        <div className="header-actions">
+          <Link to="/account" className="header-account-btn">
+            Account
+          </Link>
+          <button onClick={handleLogout} className="header-logout-btn">
+            Logout
+          </button>
+        </div>
       </div>
       
       <div className="greeting-card">
@@ -177,3 +178,42 @@ function DashboardPage() {
 }
 
 export default DashboardPage;
+
+const styles = `
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.header-account-btn {
+  background-color: #4f46e5;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.header-account-btn:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+}
+`;
+
+const styleSheet = document.createElement("style");
+styleSheet.type = "text/css";
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);

@@ -1,9 +1,7 @@
 import axios from 'axios';
 
-// Change API_URL to include the full base URL (assuming the server is running at port 5000)
 const API_URL = 'http://localhost:5000/api/notebooks';
 
-// Create axios instance with auth header
 const axiosInstance = () => {
   const token = localStorage.getItem('token');
   return axios.create({
@@ -14,7 +12,6 @@ const axiosInstance = () => {
   });
 };
 
-// Get all notebooks
 export const getNotebooks = async () => {
   try {
     const response = await axiosInstance().get('/');
@@ -25,7 +22,6 @@ export const getNotebooks = async () => {
   }
 };
 
-// Get a specific notebook
 export const getNotebook = async (id) => {
   try {
     const response = await axiosInstance().get(`/${id}`);
@@ -36,7 +32,6 @@ export const getNotebook = async (id) => {
   }
 };
 
-// Create a new notebook
 export const createNotebook = async (notebookData) => {
   try {
     const response = await axiosInstance().post('/', notebookData);
@@ -47,7 +42,6 @@ export const createNotebook = async (notebookData) => {
   }
 };
 
-// Update a notebook
 export const updateNotebook = async (id, notebookData) => {
   try {
     const response = await axiosInstance().put(`/${id}`, notebookData);
@@ -58,7 +52,6 @@ export const updateNotebook = async (id, notebookData) => {
   }
 };
 
-// Delete a notebook
 export const deleteNotebook = async (id) => {
   try {
     const response = await axiosInstance().delete(`/${id}`);
@@ -67,4 +60,4 @@ export const deleteNotebook = async (id) => {
     console.error(`Error deleting notebook ${id}:`, error);
     throw error;
   }
-}; 
+};

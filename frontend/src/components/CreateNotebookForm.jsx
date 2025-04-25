@@ -8,16 +8,13 @@ const CreateNotebookForm = ({ onSubmit, onCancel }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Basic validation
     if (!title.trim()) {
       setError('Notebook title is required');
       return;
     }
     
-    // Clear any existing errors
     setError('');
     
-    // Call the onSubmit handler with the form data
     onSubmit({ title, description });
   };
   

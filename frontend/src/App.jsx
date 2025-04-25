@@ -5,9 +5,9 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import NotebookPage from './pages/NotebookPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import AccountPage from './pages/AccountPage';
 import './App.css'
 
-// Basic Private Route Component
 function PrivateRoute({ children }) {
   const isAuthenticated = !!localStorage.getItem('token');
   return isAuthenticated ? children : <Navigate to="/login" />;
@@ -57,12 +57,18 @@ function App() {
               </PrivateRoute>
             }
           />
-          {/* Redirect root path to login or dashboard based on auth */}
+          <Route
+            path="/account"
+            element={
+              <PrivateRoute>
+                <AccountPage />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/"
             element={localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
           />
-          {/* 404 Not Found Route */}
           <Route path="*" element={
             <div className="auth-container">
               <h2>404 Not Found</h2>
