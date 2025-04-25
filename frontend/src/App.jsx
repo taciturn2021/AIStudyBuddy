@@ -1,0 +1,70 @@
+import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import DashboardPage from './pages/DashboardPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import './App.css'
+
+// Basic Private Route Component
+function PrivateRoute({ children }) {
+  const isAuthenticated = !!localStorage.getItem('token');
+  return isAuthenticated ? children : <Navigate to="/login" />;
+}
+
+function App() {
+  const location = useLocation();
+  const [displayLocation, setDisplayLocation] = useState(location);
+  const [transitionStage, setTransitionStage] = useState("fadeIn");
+
+  useEffect(() => {
+    if (location !== displayLocation) {
+      setTransitionStage("fadeOut");
+    }
+  }, [location, displayLocation]);
+
+  const handleAnimationEnd = () => {
+    if (transitionStage === "fadeOut") {
+      setTransitionStage("fadeIn");
+      setDisplayLocation(location);
+    }
+  };
+
+  return (
+    <div className="App">
+      <div 
+        className={`page ${transitionStage}`}
+        onAnimationEnd={handleAnimationEnd}
+      >
+        <Routes location={displayLocation}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <PrivateRoute>
+                <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          {/* Redirect root path to login or dashboard based on auth */}
+          <Route
+            path="/"
+            element={localStorage.getItem('token') ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
+          />
+          {/* 404 Not Found Route */}
+          <Route path="*" element={
+            <div className="auth-container">
+              <h2>404 Not Found</h2>
+              <p>The page you're looking for doesn't exist.</p>
+              <Link to="/">Go Home</Link>
+            </div>
+          } />
+        </Routes>
+      </div>
+    </div>
+  );
+}
+
+export default App
