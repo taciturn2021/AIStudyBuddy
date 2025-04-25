@@ -31,6 +31,10 @@ body {
   line-height: 1.5;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
 /* Root container */
 #root {
   width: 100%;
@@ -1802,4 +1806,512 @@ button.loading::after {
     padding: 0.5rem 0.75rem;
     font-size: 0.8rem;
   }
+}
+
+/* PDF Upload Area Styles */
+.upload-pdf-container {
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 2px dashed #cbd5e1;
+  padding: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.upload-pdf-container:hover {
+  border-color: #94a3b8;
+  background-color: #f1f5f9;
+}
+
+.upload-pdf-title {
+  color: #1e293b;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.upload-pdf-area {
+  padding: 2rem;
+  background-color: #f0f7ff;
+  border-radius: 8px;
+  border: 1px solid #bfdbfe;
+  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.upload-pdf-area:hover {
+  background-color: #e0f2fe;
+}
+
+.upload-pdf-area .close-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.upload-pdf-area .close-btn:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+  transform: scale(1.1);
+}
+
+.upload-pdf-instructions {
+  margin-bottom: 1.5rem;
+  color: #475569;
+}
+
+.upload-pdf-btn, .browse-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+  font-size: 0.95rem;
+  display: inline-block;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.browse-btn {
+  width: auto;
+  min-width: 120px;
+}
+
+.upload-pdf-btn:hover, .browse-btn:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.3);
+}
+
+.upload-pdf-btn:active, .browse-btn:active {
+  transform: translateY(0);
+}
+
+.file-size-info {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.uploaded-documents {
+  margin-top: 2rem;
+}
+
+.uploaded-documents h3 {
+  font-size: 1.2rem;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+
+.no-documents {
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+/* Responsive styles for PDF upload */
+@media (max-width: 550px) {
+  .upload-pdf-container {
+    padding: 1.25rem;
+  }
+  
+  .upload-pdf-area {
+    padding: 1.5rem 1rem;
+  }
+  
+  .upload-pdf-title {
+    font-size: 1.1rem;
+  }
+  
+  .upload-pdf-btn, .browse-btn {
+    width: 100%;
+    padding: 0.7rem 1rem;
+  }
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
+  padding: 0.35rem 0.8rem;
+  line-height: 1;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  background-color: #fee2e2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.modal-body {
+  /* Add any specific styles for the modal body if needed */
+}
+
+/* Ensure PDF uploader styles fit well within the modal */
+.modal-body .upload-pdf-container {
+  margin-bottom: 0;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+}
+
+.modal-body .upload-pdf-area {
+  padding: 1.5rem;
+}
+
+.modal-body .upload-pdf-btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.8rem 1.5rem;
+}
+
+/* Style the container for the selected file preview and upload button */
+.selected-file {
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  margin-top: 1rem;
+}
+
+.file-preview {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.file-icon {
+  font-size: 1.8rem;
+  margin-right: 1rem;
+  color: #64748b;
+}
+
+.file-info {
+  flex-grow: 1;
+}
+
+.file-name {
+  font-weight: 600;
+  color: #334155;
+  word-break: break-all;
+}
+
+.file-size {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Adjust close button style for the file preview */
+.file-preview .close-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  font-size: 1rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+/* Progress bar styles (copied/adjusted from previous potential styles) */
+.upload-progress {
+  margin-top: 1rem;
+}
+
+.progress-bar {
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background-color: #3b82f6;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  font-size: 0.85rem;
+  color: #475569;
+  text-align: center;
+}
+
+/* Document List Styles */
+.document-list {
+  margin-top: 2rem;
+}
+
+.document-list h3 {
+  font-size: 1.3rem;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.document-items {
+  display: grid;
+  gap: 1rem;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: box-shadow 0.2s ease;
+}
+
+.document-item:hover {
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.document-icon {
+  font-size: 1.8rem;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.document-details {
+  flex-grow: 1;
+  min-width: 0; /* Prevent flex item from overflowing */
+}
+
+.document-name {
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.document-meta {
+  font-size: 0.85rem;
+  color: #64748b;
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  gap: 0.75rem; /* Space between meta items */
+}
+
+.document-status {
+  font-weight: 500;
+}
+
+.document-status.processed {
+  color: #10b981;
+}
+
+.document-status.processing {
+  color: #f59e0b;
+}
+
+.document-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center; /* Align buttons vertically */
+  flex-shrink: 0;
+}
+
+.btn-view, .document-actions .btn-delete {
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn-view {
+  background-color: #3b82f6;
+  color: white;
+  box-shadow: 0 1px 2px rgba(59, 130, 246, 0.2);
+}
+
+.btn-view:hover {
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.document-actions .btn-delete {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
+
+.document-actions .btn-delete:hover {
+  background-color: #fee2e2;
+  transform: translateY(-1px);
+}
+
+/* Style the delete confirmation within the document item */
+.document-actions .delete-confirmation {
+  background-color: transparent; /* Override previous style */
+  padding: 0;
+  border: none;
+  width: auto; /* Fit content */
+  animation: none; /* Override animation */
+  text-align: center;
+}
+
+.document-actions .delete-confirmation p {
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  color: #b91c1c;
+}
+
+.document-actions .confirmation-buttons {
+  gap: 0.5rem;
+}
+
+.document-actions .confirmation-buttons .btn-confirm,
+.document-actions .confirmation-buttons .btn-cancel {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.8rem;
+  min-width: 60px; /* Ensure buttons have some width */
+}
+
+.document-actions .confirmation-buttons .btn-confirm {
+   box-shadow: 0 1px 2px rgba(239, 68, 68, 0.2);
+}
+.document-actions .confirmation-buttons .btn-confirm:hover {
+   box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+/* Responsive adjustments for document list */
+@media (max-width: 600px) {
+  .document-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .document-details {
+    width: 100%; /* Take full width in column layout */
+  }
+  
+  .document-actions {
+    width: 100%;
+    justify-content: flex-end; /* Align buttons to the right */
+    margin-top: 0.5rem;
+  }
+  
+  .document-actions .delete-confirmation {
+    width: 100%;
+  }
+}
+
+/* Loading/Error/Empty States for Document List */
+.document-list-loading, .document-list-error, .empty-documents {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  margin-top: 1rem;
+  border: 1px dashed #cbd5e1;
+  color: #64748b;
+}
+
+.document-list-loading .spinner {
+  margin: 0 auto 1rem auto; /* Center spinner */
+}
+
+.document-list-error .error-message {
+  background-color: transparent; /* Remove default error bg */
+  border: none;
+  color: #b91c1c; /* Keep error text color */
+  padding: 0;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.retry-btn {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.retry-btn:hover {
+  background-color: #2563eb;
 }

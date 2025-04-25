@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 
 // Load environment variables
 dotenv.config();
@@ -14,12 +15,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Create uploads directory if it doesn't exist
+const fs = require('fs');
+if (!fs.existsSync('./backend/uploads')) {
+  fs.mkdirSync('./backend/uploads', { recursive: true });
+}
+
 // Routes
 const authRoutes = require('./routes/auth');
 const notebookRoutes = require('./routes/notebooks');
+const documentRoutes = require('./routes/documents');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/notebooks', notebookRoutes);
+app.use('/api/documents', documentRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {

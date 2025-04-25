@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getNotebook, updateNotebook } from '../services/notebookService';
+import UploadModal from '../components/UploadModal';
+import DocumentList from '../components/DocumentList';
 
 function NotebookPage() {
   const { id } = useParams();
@@ -11,6 +13,8 @@ function NotebookPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [documentListChanged, setDocumentListChanged] = useState(0);
 
   useEffect(() => {
     // Check if user is logged in
@@ -51,6 +55,15 @@ function NotebookPage() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleUploadClick = () => {
+    setIsUploadModalOpen(true);
+  };
+
+  const handleUploadSuccess = () => {
+    // Increment the counter to trigger a refresh of the document list
+    setDocumentListChanged(prev => prev + 1);
   };
 
   const formatDate = (dateString) => {
@@ -151,7 +164,7 @@ function NotebookPage() {
       <div className="notebook-content">
         <h2>Study Tools</h2>
         <div className="tool-buttons">
-          <button className="tool-btn upload-btn">
+          <button className="tool-btn upload-btn" onClick={handleUploadClick}>
             <span className="tool-icon">📄</span>
             <span className="tool-label">Upload PDF</span>
           </button>
@@ -169,11 +182,20 @@ function NotebookPage() {
           </button>
         </div>
 
-        <div className="empty-content-message">
-          <div className="empty-icon">📚</div>
-          <h3>This notebook is empty</h3>
-          <p>Upload content or create study materials to get started</p>
+        <div className="documents-section">
+          <DocumentList 
+            notebookId={id} 
+            documentListChanged={documentListChanged} 
+          />
         </div>
+
+        {/* Upload Modal */}
+        <UploadModal 
+          notebookId={id}
+          isOpen={isUploadModalOpen} 
+          onClose={() => setIsUploadModalOpen(false)}
+          onUploadSuccess={handleUploadSuccess}
+        />
       </div>
     </div>
   );
