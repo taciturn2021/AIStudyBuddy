@@ -10,6 +10,8 @@ const cron = require('node-cron');
 const { retryUnprocessedPdfs, ensureSchemaFields } = require('./jobs/pdfRetryProcessor');
 const accountRoutes = require('./routes/account');
 const { errorHandler } = require('./middleware/errorMiddleware');
+const chatRoutes = require('./routes/chat');
+const modelsRoutes = require('./routes/models');
 
 const app = express();
 
@@ -31,6 +33,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/notebooks', notebookRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/account', accountRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/models', modelsRoutes);
 
 app.get('/', (req, res) => {
   res.send('AI Study Buddy API is running!');

@@ -15,7 +15,6 @@
   --bg-gradient: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
 }
 
-/* Reset basic styles */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -44,7 +43,6 @@ body {
   position: relative;
 }
 
-/* AI Study Buddy background effects */
 body::before, body::after {
   content: "";
   position: absolute;
@@ -88,7 +86,6 @@ code {
   font-size: 0.9em;
 }
 
-/* Simple fade in animation for page transitions */
 @keyframes pageTransition {
   from { 
     opacity: 0;
@@ -100,13 +97,11 @@ code {
   }
 }
 
-/* Rotation animation for loading states */
 @keyframes rotate {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Accessibility focus styles */
 :focus {
   outline: 2px solid var(--primary);
   outline-offset: 2px;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { saveTextDocument } from '../services/documentService'; // We'll add this service function next
+import { saveTextDocument } from '../services/documentService';
 
 function EnterContentModal({ notebookId, isOpen, onClose, onSaveSuccess }) {
   const [title, setTitle] = useState('');
@@ -7,7 +7,6 @@ function EnterContentModal({ notebookId, isOpen, onClose, onSaveSuccess }) {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Reset form when modal opens or closes
   useEffect(() => {
     if (!isOpen) {
       setTitle('');
@@ -33,7 +32,7 @@ function EnterContentModal({ notebookId, isOpen, onClose, onSaveSuccess }) {
     setIsLoading(true);
     try {
       await saveTextDocument(notebookId, { title: title.trim(), content: content.trim() });
-      onSaveSuccess(); // Call the success handler passed from NotebookPage
+      onSaveSuccess();
     } catch (err) {
       console.error('Error saving text document:', err);
       setError(err.response?.data?.message || 'Failed to save content. Please try again.');
@@ -43,7 +42,7 @@ function EnterContentModal({ notebookId, isOpen, onClose, onSaveSuccess }) {
   };
 
   const handleModalContentClick = (e) => {
-    e.stopPropagation(); // Prevent clicks inside modal from closing it
+    e.stopPropagation();
   };
 
   if (!isOpen) return null;
@@ -94,11 +93,10 @@ function EnterContentModal({ notebookId, isOpen, onClose, onSaveSuccess }) {
           </form>
         </div>
       </div>
-      {/* Basic styling for the text entry modal */}
       <style>{`
         .enter-content-form textarea {
           width: 100%;
-          min-height: 200px; /* Adjust as needed */
+          min-height: 200px;
           resize: vertical;
           font-family: inherit;
           font-size: 0.95rem;

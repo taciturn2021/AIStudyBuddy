@@ -141,20 +141,15 @@ const deleteDocument = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc    Save text content as a document
-// @route   POST /api/documents/:notebookId/text
-// @access  Private
 const saveTextDocument = asyncHandler(async (req, res) => {
   const { notebookId } = req.params;
   const { title, content } = req.body;
 
-  // Validate input
   if (!title || !content) {
     res.status(400);
     throw new Error('Title and content are required');
   }
 
-  // Check if notebook exists and belongs to user
   const notebook = await Notebook.findOne({
     _id: notebookId,
     user: req.user.id
@@ -165,24 +160,21 @@ const saveTextDocument = asyncHandler(async (req, res) => {
     throw new Error('Notebook not found or not authorized');
   }
 
-  // Create document record
   const document = await Document.create({
     notebook: notebookId,
     user: req.user.id,
-    filename: `${title.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}.txt`, // Create a filename
-    originalFilename: title, // Use provided title as original filename
-    fileSize: Buffer.byteLength(content, 'utf8'), // Calculate content size
-    filePath: null, // No physical file path
-    fileType: 'text/plain', // Indicate text content
-    processed: true, // Mark as processed immediately
-    'content.text': content, // Save the content
-    'content.pages': 1, // Assume 1 page for text content
+    filename: `${title.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}.txt`,
+    originalFilename: title,
+    fileSize: Buffer.byteLength(content, 'utf8'),
+    filePath: null,
+    fileType: 'text/plain',
+    processed: true,
+    'content.text': content,
+    'content.pages': 1,
   });
 
-  // Update notebook's lastUpdated field
   await Notebook.findByIdAndUpdate(notebookId, { lastUpdated: Date.now() });
 
-  // Respond with the created document data
   res.status(201).json({
     success: true,
     data: {

@@ -65,6 +65,10 @@ function NotebookPage() {
     setIsEnterContentModalOpen(true);
   };
 
+  const handleAiAssistantClick = () => {
+    navigate(`/notebook/${id}/chat`);
+  };
+
   const handleUploadSuccess = () => {
     setDocumentListChanged(prev => prev + 1);
     setIsUploadModalOpen(false);
@@ -189,7 +193,7 @@ function NotebookPage() {
             <span className="tool-icon">📝</span>
             <span className="tool-label">Create Quiz</span>
           </button>
-          <button className="tool-btn assistant-btn">
+          <button className="tool-btn assistant-btn" onClick={handleAiAssistantClick}>
             <span className="tool-icon">💬</span>
             <span className="tool-label">Ask AI Assistant</span>
           </button>
