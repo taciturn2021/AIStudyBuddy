@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import NotebookPage from './pages/NotebookPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import './App.css'
 
@@ -45,6 +46,14 @@ function App() {
             element={
               <PrivateRoute>
                 <DashboardPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/notebook/:id"
+            element={
+              <PrivateRoute>
+                <NotebookPage />
               </PrivateRoute>
             }
           />

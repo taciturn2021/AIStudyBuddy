@@ -16,7 +16,10 @@ app.use(express.json());
 
 // Routes
 const authRoutes = require('./routes/auth');
+const notebookRoutes = require('./routes/notebooks');
+
 app.use('/api/auth', authRoutes);
+app.use('/api/notebooks', notebookRoutes);
 
 // Basic route for testing
 app.get('/', (req, res) => {
