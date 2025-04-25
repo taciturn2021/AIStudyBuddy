@@ -43,6 +43,14 @@ const DocumentSchema = new mongoose.Schema({
     type: String,
     default: null
   },
+  retryCount: {
+    type: Number,
+    default: 0
+  },
+  lastAttemptDate: {
+    type: Date,
+    default: null
+  },
   content: {
     text: { type: String, default: null },
     pages: { type: Number, default: null }

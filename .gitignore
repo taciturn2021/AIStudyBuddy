@@ -23,5 +23,5 @@ instructions.txt
 *.njsproj
 *.sln
 *.sw?
-
+backend/backend/uploads
 

@@ -134,6 +134,9 @@ function PDFUploader({ notebookId, onUploadSuccess, onUploadError }) {
             accept="application/pdf"
             style={{ display: 'none' }}
           />
+          <div className="alert alert-info" style={{ textAlign: 'left', fontSize: '0.85rem', marginTop: '1rem' }}>
+            <strong>Note:</strong> Only text content will be extracted. Images and complex formatting may not be preserved for AI context.
+          </div>
         </div>
       ) : (
         <div className="selected-file">

@@ -3,6 +3,7 @@ const fs = require('fs');
 const Document = require('../models/Document');
 const Notebook = require('../models/Notebook');
 const asyncHandler = require('express-async-handler');
+const { processPdf } = require('../services/pdfProcessor');
 
 // @desc    Upload a document to a notebook
 // @route   POST /api/documents/:notebookId
@@ -49,16 +50,23 @@ const uploadDocument = asyncHandler(async (req, res) => {
   // Update notebook's lastUpdated field
   await Notebook.findByIdAndUpdate(notebookId, { lastUpdated: Date.now() });
 
-  // Queue document for processing (this would trigger PDF text extraction - to be implemented)
-
+  // Respond to the user immediately
   res.status(201).json({
     success: true,
     data: {
       id: document._id,
       filename: document.originalFilename,
       uploadDate: document.uploadDate,
-      fileSize: document.fileSize
+      fileSize: document.fileSize,
+      processed: document.processed
     }
+  });
+
+  // Asynchronously process the PDF after responding
+  console.log(`[Controller] Queuing document ${document._id} for processing.`);
+  processPdf(document.filePath, document._id).catch(err => {
+    // Catch potential errors during the async process call itself (not errors *within* processPdf)
+    console.error(`[Controller] Error initiating processing for document ${document._id}:`, err);
   });
 });
 
@@ -132,13 +140,27 @@ const deleteDocument = asyncHandler(async (req, res) => {
     throw new Error('Document not found or not authorized');
   }
 
-  // Delete file from storage
-  if (fs.existsSync(document.filePath)) {
-    fs.unlinkSync(document.filePath);
+  // Get file path before deleting document record
+  const filePath = document.filePath;
+
+  // Delete document from database first
+  const deleteResult = await Document.deleteOne({ _id: documentId });
+
+  if (deleteResult.deletedCount === 0) {
+      // Should not happen if findOne succeeded, but good practice to check
+      res.status(404);
+      throw new Error('Document found but could not be deleted');
   }
 
-  // Delete document from database
-  await document.remove();
+  // Delete file from storage *after* successful DB deletion
+  if (fs.existsSync(filePath)) {
+    try {
+      fs.unlinkSync(filePath);
+    } catch (fileError) {
+      // Log the error but don't fail the request, as DB record is deleted
+      console.error(`Error deleting file ${filePath}:`, fileError);
+    }
+  }
 
   // Update notebook's lastUpdated field
   await Notebook.findByIdAndUpdate(notebookId, { lastUpdated: Date.now() });
