@@ -7,14 +7,19 @@ const errorHandler = (err, req, res, next) => {
 
   const statusCode = res.statusCode && res.statusCode >= 400 ? res.statusCode : 500;
 
-  console.error(`Error: ${err.message}\nStack: ${process.env.NODE_ENV === 'production' ? null : err.stack}`);
+  // Log the full error for server-side debugging
+  console.error(`Error: ${err.message}\nStack: ${err.stack}`);
 
+  // In production, send minimal error information to client
+  const isProd = process.env.NODE_ENV === 'production';
+  
   res.status(statusCode);
 
   res.json({
     success: false,
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+    message: isProd && statusCode === 500 ? 'Server error occurred' : err.message,
+    // Never send stack traces to the client in production
+    stack: isProd ? null : err.stack,
   });
 };
 

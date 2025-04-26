@@ -15,13 +15,20 @@ async function processPdf(filePath, documentId) {
     const extractedText = pdfData.text;
     const numPages = pdfData.numpages;
 
-    console.log(`[PDF Processor] Extracted ${extractedText.length} characters, ${numPages} pages for document: ${documentId}`);
-
-    await Document.findByIdAndUpdate(documentId, {
+    console.log(`[PDF Processor] Extracted ${extractedText.length} characters, ${numPages} pages for document: ${documentId}`);    await Document.findByIdAndUpdate(documentId, {
       processed: true,
       'content.text': extractedText,
       'content.pages': numPages,
       processingError: null,
+    });
+
+    // Delete the PDF file after successful processing
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error(`[PDF Processor] Error deleting file ${filePath}:`, err);
+      } else {
+        console.log(`[PDF Processor] Successfully deleted file ${filePath} after processing`);
+      }
     });
 
     console.log(`[PDF Processor] Successfully processed and updated document: ${documentId}`);

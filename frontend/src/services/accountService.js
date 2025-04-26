@@ -9,6 +9,7 @@ const getAuthHeaders = () => ({
   headers: {
     Authorization: `Bearer ${getAuthToken()}`,
   },
+  withCredentials: true,
 });
 
 export const updatePassword = async (passwordData) => {

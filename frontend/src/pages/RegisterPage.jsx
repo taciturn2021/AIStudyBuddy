@@ -20,11 +20,11 @@ function RegisterPage() {
     setError('');
     setSecretKey(null);
     setShowKeyConfirmation(false);
-    setKeyConfirmationError('');
-    setIsLoading(true);
+    setKeyConfirmationError('');    setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/register', {
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const response = await axios.post(`${API_BASE_URL}/api/auth/register`, {
         username,
         password,
       });

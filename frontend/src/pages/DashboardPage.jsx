@@ -80,11 +80,24 @@ function DashboardPage() {
       setIsLoading(false);
     }
   };
-
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setIsLoading(true);
+    
+    try {
+      // Clear the HTTP-only cookie by making a request to a logout endpoint
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      await fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: 'POST',
+        credentials: 'include', // important for cookies
+      });
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+    
+    // Clear local storage
+    localStorage.removeItem('token');
+    
     setTimeout(() => {
-      localStorage.removeItem('token');
       navigate('/login');
     }, 300);
   };

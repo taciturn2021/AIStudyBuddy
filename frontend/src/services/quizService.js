@@ -5,7 +5,8 @@ const API_URL = `${API_BASE_URL}/api/quizzes`;
 
 const getAuthToken = () => localStorage.getItem('token');
 const getAuthHeaders = () => ({
-  headers: { Authorization: `Bearer ${getAuthToken()}` }
+  headers: { Authorization: `Bearer ${getAuthToken()}` },
+  withCredentials: true
 });
 
 /**

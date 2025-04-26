@@ -9,8 +9,11 @@ const getAuthToken = () => localStorage.getItem('token');
 
 const getAuthHeaders = () => ({
   headers: {
+    // Include Bearer token for backward compatibility
     Authorization: `Bearer ${getAuthToken()}`,
   },
+  // This ensures cookies are sent with requests
+  withCredentials: true,
 });
 
 

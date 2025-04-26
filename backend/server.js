@@ -6,6 +6,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 const cron = require('node-cron');
 const { retryUnprocessedPdfs, ensureSchemaFields } = require('./jobs/pdfRetryProcessor');
 const { errorHandler } = require('./middleware/errorMiddleware');
@@ -23,8 +24,26 @@ const quizRoutes = require('./routes/quizzes');
 
 const app = express();
 
-app.use(cors());
+// Configure CORS with allowed origins
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? 
+  process.env.ALLOWED_ORIGINS.split(',') : 
+  ['http://localhost:5173']; // Default for development
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, etc)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 

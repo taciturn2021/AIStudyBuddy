@@ -4,7 +4,10 @@ const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
 const generateToken = (userId) => {
-  return jwt.sign({ id: userId }, process.env.JWT_SECRET || 'default_jwt_secret', {
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
@@ -33,14 +36,22 @@ exports.register = async (req, res) => {
       resetKey: plainResetKey,
     });
 
-    await user.save();
-
-    console.log('✅ [API] User registered successfully:', { username: user.username, userId: user._id });
+    await user.save();    console.log('✅ [API] User registered successfully:', { username: user.username, userId: user._id });
+    
+    const token = generateToken(user._id);
+    
+    // Set HTTP-only cookie
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // secure in production
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
     
     res.status(201).json({
       _id: user._id,
       username: user.username,
-      token: generateToken(user._id),
+      token: token, // For backward compatibility
       resetKey: plainResetKey,
     });
   } catch (error) {
@@ -65,14 +76,23 @@ exports.login = async (req, res) => {
     if (!isMatch) {
       console.log('❌ [API] Login failed: Invalid password');
       return res.status(401).json({ message: 'Invalid username or password' });
-    }
-
-    console.log('✅ [API] User logged in successfully:', { username: user.username, userId: user._id });
+    }    console.log('✅ [API] User logged in successfully:', { username: user.username, userId: user._id });
+    
+    const token = generateToken(user._id);
+    
+    // Set HTTP-only cookie
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // secure in production
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
     
     res.json({
       _id: user._id,
       username: user.username,
-      token: generateToken(user._id),
+      // Still send token for backward compatibility - will be removed in future
+      token: token,
     });
   } catch (error) {
     console.error('❌ [API] Login error:', error);
@@ -161,8 +181,25 @@ exports.resetPassword = async (req, res) => {
       token: generateToken(user._id),
       resetKey: newResetKey,
     });
-  } catch (error) {
-    console.error('❌ [API] Password reset error:', error);
+  } catch (error) {    console.error('❌ [API] Password reset error:', error);
     res.status(500).json({ message: 'Server error during password reset' });
+  }
+};
+
+exports.logout = async (req, res) => {
+  console.log('💡 [API] Logout request received');
+  
+  try {
+    // Clear the HTTP-only auth cookie
+    res.clearCookie('authToken', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict'
+    });
+    
+    res.status(200).json({ message: 'Logged out successfully' });
+  } catch (error) {
+    console.error('❌ [API] Logout error:', error);
+    res.status(500).json({ message: 'Server error during logout' });
   }
 };
