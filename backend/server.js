@@ -8,10 +8,17 @@ const cors = require('cors');
 const path = require('path');
 const cron = require('node-cron');
 const { retryUnprocessedPdfs, ensureSchemaFields } = require('./jobs/pdfRetryProcessor');
-const accountRoutes = require('./routes/account');
 const { errorHandler } = require('./middleware/errorMiddleware');
+
+
+const authRoutes = require('./routes/auth');
+const notebookRoutes = require('./routes/notebooks');
+const documentRoutes = require('./routes/documents');
+const accountRoutes = require('./routes/account');
 const chatRoutes = require('./routes/chat');
 const modelsRoutes = require('./routes/models');
+const flashcardRoutes = require('./routes/flashcards'); 
+
 
 const app = express();
 
@@ -25,9 +32,6 @@ if (!fs.existsSync('./backend/uploads')) {
   fs.mkdirSync('./backend/uploads', { recursive: true });
 }
 
-const authRoutes = require('./routes/auth');
-const notebookRoutes = require('./routes/notebooks');
-const documentRoutes = require('./routes/documents');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/notebooks', notebookRoutes);
@@ -35,6 +39,19 @@ app.use('/api/documents', documentRoutes);
 app.use('/api/account', accountRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/models', modelsRoutes);
+
+
+
+
+try {
+  console.log('Attempting to import flashcard routes...');
+  const flashcardRoutes = require('./routes/flashcards');
+  console.log('Flashcard routes imported successfully:', typeof flashcardRoutes);
+  app.use('/api/flashcards', flashcardRoutes);
+  console.log('Flashcard routes registered successfully');
+} catch (error) {
+  console.error('Error setting up flashcard routes:', error);
+}
 
 app.get('/', (req, res) => {
   res.send('AI Study Buddy API is running!');

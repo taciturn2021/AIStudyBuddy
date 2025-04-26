@@ -1,0 +1,287 @@
+/* Flashcard Modal Styles */
+.flashcard-modal {
+  max-width: 750px;
+}
+
+.modal-section {
+  margin-bottom: 1.5rem;
+}
+
+.modal-section h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.modal-instruction {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #666;
+}
+
+.document-selection-list {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.5rem;
+  background-color: #f9fafb;
+}
+
+.document-selection-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.document-selection-item:last-child {
+  border-bottom: none;
+}
+
+.document-selection-item label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.document-selection-item input[type="checkbox"] {
+  margin-right: 0.75rem;
+}
+
+.model-selection {
+  margin-top: 0.5rem;
+}
+
+.model-select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.modal-error {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background-color: #fee2e2;
+  border-radius: 6px;
+  color: #b91c1c;
+  font-size: 0.9rem;
+}
+
+.modal-generate-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-generate-btn:hover:not(:disabled) {
+  background-color: #4338ca;
+}
+
+.modal-generate-btn:disabled {
+  background-color: #c7d2fe;
+  cursor: not-allowed;
+}
+
+/* Flashcard View Styles */
+.flashcards-container {
+  width: 100%;
+  padding: 1.5rem 0;
+}
+
+.flashcards-container.loading,
+.flashcards-container.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  background-color: #f9fafb;
+  border-radius: 12px;
+}
+
+.flashcard {
+  perspective: 1000px;
+  width: 100%;
+  height: 300px;
+  margin: 1rem 0;
+  cursor: pointer;
+}
+
+.flashcard-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.1);
+  border-radius: 12px;
+}
+
+.flashcard.flipped .flashcard-inner {
+  transform: rotateY(180deg);
+}
+
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+.flashcard-front {
+  background-color: white;
+  color: #1e293b;
+  border: 1px solid #e5e7eb;
+}
+
+.flashcard-back {
+  background-color: #4f46e5;
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.flashcard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.flashcard-content h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  color: inherit;
+}
+
+.flashcard-content p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.flashcard-footer {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  text-align: center;
+  padding-top: 1rem;
+}
+
+.flashcard-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.flashcard-counter {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.prev-card-btn,
+.next-card-btn {
+  background-color: #f8fafc;
+  border: 1px solid #e5e7eb;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.prev-card-btn:hover:not(:disabled),
+.next-card-btn:hover:not(:disabled) {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.prev-card-btn:disabled,
+.next-card-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.delete-card-btn {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: none;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-card-btn:hover:not(:disabled) {
+  background-color: #fecaca;
+}
+
+.delete-card-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .flashcard {
+    height: 250px;
+  }
+  
+  .flashcard-content p {
+    font-size: 1rem;
+  }
+  
+  .flashcard-controls {
+    flex-wrap: wrap;
+  }
+}
+
+/* Flashcard Section in NotebookPage */
+.flashcard-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.flashcard-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.flashcard-section h2 {
+  margin: 0;
+  font-size: 1.4rem;
+  color: #1e293b;
+}
+
+.btn-close-section {
+  background-color: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.btn-close-section:hover {
+  background-color: #e2e8f0;
+  color: #475569;
+}
