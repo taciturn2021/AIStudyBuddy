@@ -68,9 +68,12 @@ function NotebookPage() {
 
   const handleAiAssistantClick = () => {
     navigate(`/notebook/${id}/chat`);
-  };
-  const handleGenerateFlashcardsClick = () => {
+  };  const handleGenerateFlashcardsClick = () => {
     navigate(`/notebook/${id}/flashcards`);
+  };
+
+  const handleQuizClick = () => {
+    navigate(`/notebook/${id}/quiz`);
   };
 
   const handleUploadSuccess = () => {
@@ -191,15 +194,14 @@ function NotebookPage() {
           </button>
           <button className="tool-btn flashcards-btn" onClick={handleGenerateFlashcardsClick}>
             <span className="tool-icon">🔍</span>
-            <span className="tool-label">Generate Flashcards</span>
-          </button>
-          <button className="tool-btn quiz-btn">
+            <span className="tool-label">Flashcards</span>
+          </button>          <button className="tool-btn quiz-btn" onClick={handleQuizClick}>
             <span className="tool-icon">📝</span>
-            <span className="tool-label">Create Quiz</span>
+            <span className="tool-label">Quizzes</span>
           </button>
           <button className="tool-btn assistant-btn" onClick={handleAiAssistantClick}>
             <span className="tool-icon">💬</span>
-            <span className="tool-label">Ask AI Assistant</span>
+            <span className="tool-label">AI Assistant</span>
           </button>
         </div>
 

@@ -14,10 +14,11 @@ const { errorHandler } = require('./middleware/errorMiddleware');
 const authRoutes = require('./routes/auth');
 const notebookRoutes = require('./routes/notebooks');
 const documentRoutes = require('./routes/documents');
-const accountRoutes = require('./routes/account');
+const flashcardRoutes = require('./routes/flashcards');
 const chatRoutes = require('./routes/chat');
-const modelsRoutes = require('./routes/models');
-const flashcardRoutes = require('./routes/flashcards'); 
+const accountRoutes = require('./routes/account');
+const modelRoutes = require('./routes/models');
+const quizRoutes = require('./routes/quizzes'); 
 
 
 const app = express();
@@ -33,12 +34,15 @@ if (!fs.existsSync('./backend/uploads')) {
 }
 
 
+
 app.use('/api/auth', authRoutes);
 app.use('/api/notebooks', notebookRoutes);
 app.use('/api/documents', documentRoutes);
-app.use('/api/account', accountRoutes);
+app.use('/api/flashcards', flashcardRoutes);
 app.use('/api/chat', chatRoutes);
-app.use('/api/models', modelsRoutes);
+app.use('/api/account', accountRoutes);
+app.use('/api/models', modelRoutes);
+app.use('/api/quizzes', quizRoutes); 
 
 
 
@@ -96,4 +100,3 @@ mongoose
   .catch((error) => {
     console.error('MongoDB connection error:', error);
   });
-  

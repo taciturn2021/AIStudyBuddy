@@ -8,6 +8,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import AccountPage from './pages/AccountPage';
 import AiAssistantPage from './pages/AiAssistantPage';
 import FlashcardPage from './pages/FlashcardPage';
+import QuizPage from './pages/QuizPage';
 import './App.css'
 
 function PrivateRoute({ children }) {
@@ -27,6 +28,11 @@ function App() {
   
   const flashcardRouteMatch = useMemo(() => {
     const match = location.pathname.match(/^\/notebook\/([\w-]+)\/flashcards$/);
+    return match ? { isMatch: true, notebookId: match[1] } : { isMatch: false };
+  }, [location.pathname]);
+
+  const quizRouteMatch = useMemo(() => {
+    const match = location.pathname.match(/^\/notebook\/([\w-]+)\/quiz$/);
     return match ? { isMatch: true, notebookId: match[1] } : { isMatch: false };
   }, [location.pathname]);
 
@@ -52,6 +58,10 @@ function App() {
       ) : flashcardRouteMatch.isMatch ? (
         <PrivateRoute>
           <FlashcardPage notebookId={flashcardRouteMatch.notebookId} />
+        </PrivateRoute>
+      ) : quizRouteMatch.isMatch ? (
+        <PrivateRoute>
+          <QuizPage notebookId={quizRouteMatch.notebookId} />
         </PrivateRoute>
       ) : (
         <div 

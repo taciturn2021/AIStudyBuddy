@@ -1,0 +1,123 @@
+.quiz-generating-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.quiz-generating-content {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+}
+
+.quiz-generating-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.generating-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(79, 70, 229, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.generating-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(79, 70, 229, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1.5s linear infinite;
+}
+
+.quiz-generating-header h2 {
+  font-size: 1.8rem;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.document-info {
+  margin-bottom: 2rem;
+}
+
+.document-info p {
+  margin: 0.5rem 0;
+  color: var(--text-secondary);
+}
+
+.quiz-title-generating {
+  font-weight: 500;
+  color: var(--text-color) !important;
+  font-size: 1.1rem;
+}
+
+.generation-progress {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.current-step {
+  margin: 1rem 0;
+  font-weight: 500;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.wait-message {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+.ai-info {
+  border-top: 1px solid var(--divider-color);
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+
+.ai-info p {
+  color: var(--text-secondary);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+  .quiz-generating-content {
+    padding: 1.5rem;
+  }
+  
+  .quiz-generating-header h2 {
+    font-size: 1.5rem;
+  }
+  
+  .generating-icon {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .generating-spinner {
+    width: 35px;
+    height: 35px;
+  }
+}
