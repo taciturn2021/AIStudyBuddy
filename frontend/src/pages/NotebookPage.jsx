@@ -4,8 +4,6 @@ import { getNotebook, updateNotebook } from '../services/notebookService';
 import UploadModal from '../components/UploadModal';
 import DocumentList from '../components/DocumentList';
 import EnterContentModal from '../components/EnterContentModal';
-import FlashcardModal from '../components/FlashcardModal';
-import FlashcardView from '../components/FlashcardView';
 import '../components/Flashcard.css';
 
 function NotebookPage() {
@@ -19,9 +17,6 @@ function NotebookPage() {
   const [description, setDescription] = useState('');
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [isEnterContentModalOpen, setIsEnterContentModalOpen] = useState(false);
-  const [isFlashcardModalOpen, setIsFlashcardModalOpen] = useState(false);
-  const [showFlashcardView, setShowFlashcardView] = useState(false);
-  const [generatedFlashcards, setGeneratedFlashcards] = useState(null);
   const [documentListChanged, setDocumentListChanged] = useState(0);
 
   useEffect(() => {
@@ -74,21 +69,8 @@ function NotebookPage() {
   const handleAiAssistantClick = () => {
     navigate(`/notebook/${id}/chat`);
   };
-
   const handleGenerateFlashcardsClick = () => {
-    setIsFlashcardModalOpen(true);
-  };
-
-  const handleFlashcardGenerated = (flashcards) => {
-    setGeneratedFlashcards(flashcards);
-    setShowFlashcardView(true);
-   
-    setDocumentListChanged(prev => prev + 1);
-  };
-
-  const handleFlashcardDeleted = () => {
-    
-    setDocumentListChanged(prev => prev + 1);
+    navigate(`/notebook/${id}/flashcards`);
   };
 
   const handleUploadSuccess = () => {
@@ -241,32 +223,6 @@ function NotebookPage() {
           onClose={() => setIsEnterContentModalOpen(false)}
           onSaveSuccess={handleSaveTextSuccess}
         />
-        
-        <FlashcardModal
-          notebookId={id}
-          isOpen={isFlashcardModalOpen}
-          onClose={() => setIsFlashcardModalOpen(false)}
-          onGenerateSuccess={handleFlashcardGenerated}
-        />
-
-        {showFlashcardView && (
-          <div className="flashcard-section">
-            <div className="section-header">
-              <h2>Flashcards</h2>
-              <button 
-                onClick={() => setShowFlashcardView(false)}
-                className="btn-close-section"
-              >
-                Close Flashcards
-              </button>
-            </div>
-            <FlashcardView
-              notebookId={id}
-              newFlashcards={generatedFlashcards}
-              onFlashcardDeleted={handleFlashcardDeleted}
-            />
-          </div>
-        )}
       </div>
     </div>
   );
