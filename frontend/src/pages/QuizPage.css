@@ -764,4 +764,8 @@ select {
   .btn-toggle-sidebar {
     display: none;
   }
+  
+  .button-row {
+    display: contents !important;
+  }
 }

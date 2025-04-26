@@ -448,16 +448,18 @@ function AiAssistantPage({ notebookId }) {
                 }
               }}
             />
-            <button 
-              type="button"
-              className="btn-toggle-sidebar"
-              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-            >
-              {isSidebarCollapsed ? 'Show Options' : 'Hide Options'}
-            </button>
-            <button type="submit" disabled={isLoadingChat || isLoadingMessages || !currentInput.trim()}>
-              {isLoadingChat ? 'Sending...' : 'Send'}
-            </button>
+            <div className="button-row">
+              <button 
+                type="button"
+                className="btn-toggle-sidebar"
+                onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              >
+                {isSidebarCollapsed ? 'Show Options' : 'Hide Options'}
+              </button>
+              <button type="submit" disabled={isLoadingChat || isLoadingMessages || !currentInput.trim()}>
+                {isLoadingChat ? 'Sending...' : 'Send'}
+              </button>
+            </div>
           </form>
         </div>
       </div>
