@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import './NotebookList.css';
 
-const NotebookList = ({ notebooks, onDelete }) => {
+
+function NotebookList({ notebooks, onDelete }) {
   const [expandedId, setExpandedId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
 
@@ -63,50 +65,49 @@ const NotebookList = ({ notebooks, onDelete }) => {
             </div>
           </div>
           
-          {expandedId === notebook._id && (
-            <div className="notebook-details">
-              <p className="notebook-description">
-                {notebook.description || 'First notebook'}
-              </p>
-              <div className="notebook-actions">
-                {deletingId === notebook._id ? (
-                  <div className="delete-confirmation">
-                    <p>Are you sure?</p>
-                    <div className="confirmation-buttons">
-                      <button 
-                        onClick={confirmDelete} 
-                        className="btn-confirm"
-                      >
-                        Yes, delete
-                      </button>
-                      <button 
-                        onClick={cancelDelete} 
-                        className="btn-cancel"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <Link to={`/notebook/${notebook._id}`} className="btn-open">
-                      Open Notebook
-                    </Link>
+          <div className="notebook-details">
+            <p className="notebook-description">
+              {notebook.description || 'First notebook'}
+            </p>
+            <div className="notebook-actions">
+              {deletingId === notebook._id ? (
+                <div className="delete-confirmation">
+                  <p>Are you sure?</p>
+                  <div className="confirmation-buttons">
                     <button 
-                      onClick={(e) => handleDeleteClick(e, notebook._id)} 
-                      className="btn-delete"
+                      onClick={confirmDelete} 
+                      className="btn-confirm"
                     >
-                      Delete
+                      Yes, delete
                     </button>
-                  </>
-                )}
-              </div>
+                    <button 
+                      onClick={cancelDelete} 
+                      className="btn-cancel"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <Link to={`/notebook/${notebook._id}`} className="btn-open">
+                    Open Notebook
+                  </Link>
+                  <button 
+                    onClick={(e) => handleDeleteClick(e, notebook._id)} 
+                    className="btn-delete"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
-          )}
+          </div>
         </div>
       ))}
     </div>
   );
 };
 
-export default NotebookList; 
+
+export default NotebookList;

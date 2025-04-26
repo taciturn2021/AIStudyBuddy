@@ -115,11 +115,11 @@ function NotebookPage() {
 
   return (
     <div className="notebook-page">
+      <Link to="/dashboard" className="btn-back" style={{ marginBottom: '1rem', display: 'inline-block' }}>
+        ← Back to Dashboard
+      </Link>
       <div className="notebook-header">
         <div className="header-left">
-          <Link to="/dashboard" className="btn-back">
-            ← Back to Dashboard
-          </Link>
           {isEditing ? (
             <div className="edit-title-container">
               <input
@@ -224,4 +224,4 @@ function NotebookPage() {
   );
 }
 
-export default NotebookPage; 
+export default NotebookPage;

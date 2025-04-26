@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import NotebookList from '../components/NotebookList';
 import CreateNotebookForm from '../components/CreateNotebookForm';
 import { getNotebooks, createNotebook, deleteNotebook } from '../services/notebookService';
+import { getAccountStatus } from '../services/accountService';
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ function DashboardPage() {
   const [notebooks, setNotebooks] = useState([]);
   const [error, setError] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [isGeminiKeySet, setIsGeminiKeySet] = useState(true); 
 
   useEffect(() => {
     if (!localStorage.getItem('token')) {
@@ -25,10 +27,21 @@ function DashboardPage() {
       return "Good evening";
     };
     
-    const fetchNotebooks = async () => {
+    const fetchData = async () => {
+      setIsLoading(true);
       try {
-        const response = await getNotebooks();
-        setNotebooks(response.data);
+        
+        const notebooksResponse = await getNotebooks();
+        setNotebooks(notebooksResponse.data);
+        
+        
+        try {
+          const accountStatus = await getAccountStatus();
+          setIsGeminiKeySet(accountStatus.data.isGeminiKeySet);
+        } catch (accountErr) {
+          console.error('Error checking API key status:', accountErr);
+          
+        }
       } catch (err) {
         setError('Failed to load notebooks. Please try again later.');
         console.error('Error fetching notebooks:', err);
@@ -38,7 +51,7 @@ function DashboardPage() {
       }
     };
     
-    fetchNotebooks();
+    fetchData();
   }, [navigate]);
 
   const handleCreateNotebook = async (notebookData) => {
@@ -106,9 +119,18 @@ function DashboardPage() {
         <p>Your personalized learning journey awaits.</p>
       </div>
       
-      {error && <div className="error-message">{error}</div>}
+      {!isGeminiKeySet && (
+        <div className="api-key-warning">
+          <div className="warning-icon">⚠️</div>
+          <div className="warning-content">
+            <h3>Gemini API Key Required</h3>
+            <p>To unlock all AI features, please add your Google Gemini API Key in your <Link to="/account" className="warning-link">Account Settings</Link>.</p>
+          </div>
+        </div>
+      )}
       
-      <div className="main-content">
+      {error && <div className="error-message">{error}</div>}
+        <div className="main-content">
         <div className="notebooks-section">
           <div className="section-header">
             <h2>Your Notebooks</h2>
@@ -117,7 +139,7 @@ function DashboardPage() {
                 onClick={() => setShowCreateForm(true)}
                 className="btn-create"
               >
-                Create New Notebook
+                + New Notebook
               </button>
             )}
           </div>
@@ -210,6 +232,79 @@ const styles = `
   background-color: #4338ca;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.section-header h2 {
+  margin: 0;
+  flex-grow: 0;
+}
+
+.btn-create {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  width: auto;
+  max-width: fit-content;
+  align-self: flex-end;
+}
+
+.btn-create:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+}
+
+.api-key-warning {
+  display: flex;
+  align-items: center;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-left: 4px solid #f0ad4e;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.warning-icon {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+}
+
+.warning-content h3 {
+  margin: 0 0 0.5rem 0;
+  color: #856404;
+  font-size: 1.1rem;
+}
+
+.warning-content p {
+  margin: 0;
+  color: #856404;
+}
+
+.warning-link {
+  color: #0056b3;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.warning-link:hover {
+  text-decoration: underline;
 }
 `;
 

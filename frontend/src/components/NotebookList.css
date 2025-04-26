@@ -1,0 +1,132 @@
+/* Notebook List Animations */
+@keyframes slideDown {
+  from {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    max-height: 300px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    max-height: 300px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.notebook-details {
+  max-height: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease-out;
+}
+
+.notebook-card.expanded .notebook-details {
+  max-height: 300px; /* Adjust based on content size */
+  padding: 1rem 1.25rem 1.25rem;
+  margin-bottom: 0;
+  opacity: 1;
+  transform: translateY(0);
+  animation: slideDown 0.4s ease-in-out;
+}
+
+/* Enhance expand/collapse icon animation */
+@keyframes rotateIcon {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(180deg); }
+}
+
+@keyframes unrotateIcon {
+  from { transform: rotate(180deg); }
+  to { transform: rotate(0deg); }
+}
+
+.notebook-expand-icon {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease, background-color 0.3s ease;
+  animation: unrotateIcon 0.3s ease-in-out;
+}
+
+.notebook-card.expanded .notebook-expand-icon {
+  transform: rotate(180deg);
+  animation: rotateIcon 0.3s ease-in-out;
+  background-color: #f1f5f9;
+}
+
+/* Add a subtle scale effect to the card when expanded */
+.notebook-card {
+  transform-origin: top center;
+  transition: all 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notebook-card.expanded {
+  transform: scale(1.01);
+}
+
+/* Animation for description and actions */
+.notebook-description,
+.notebook-actions {
+  transform: translateY(10px);
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+  opacity: 0;
+}
+
+.notebook-card.expanded .notebook-description,
+.notebook-card.expanded .notebook-actions {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notebook-card.expanded .notebook-description {
+  transition-delay: 0.05s;
+}
+
+.notebook-card.expanded .notebook-actions {
+  transition-delay: 0.1s;
+}
+
+/* Smooth color transition for the card */
+.notebook-card {
+  transition: all 0.3s ease;
+}
+
+/* Smooth background color transition for the header */
+.notebook-header {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Animation for actions */
+.notebook-actions {
+  transform: translateY(10px);
+  transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+  opacity: 0;
+}
+
+.notebook-card.expanded .notebook-actions {
+  transform: translateY(0);
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+.notebook-actions {
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  padding-top: 0.5rem; /* Add padding at the top of buttons */
+}

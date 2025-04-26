@@ -31,6 +31,16 @@ export const updateGeminiKey = async (keyData) => {
   }
 };
 
+export const removeGeminiKey = async () => {
+  try {
+    const response = await axios.delete(`${API_URL}/gemini-key`, getAuthHeaders());
+    return response.data;
+  } catch (error) {
+    console.error('Error removing Gemini key:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
 export const getAccountStatus = async () => {
   try {
     const response = await axios.get(`${API_URL}/status`, getAuthHeaders());

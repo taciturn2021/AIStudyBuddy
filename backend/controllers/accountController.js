@@ -66,6 +66,21 @@ const updateGeminiKey = asyncHandler(async (req, res) => {
   res.status(200).json({ success: true, message: 'Gemini API Key saved successfully' });
 });
 
+const removeGeminiKey = asyncHandler(async (req, res) => {
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { $unset: { encryptedGeminiKey: "" } },
+    { new: true }
+  );
+
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
+  }
+
+  res.status(200).json({ success: true, message: 'Gemini API Key removed successfully' });
+});
+
 const getAccountStatus = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user.id).select('encryptedGeminiKey');
 
@@ -82,4 +97,4 @@ const getAccountStatus = asyncHandler(async (req, res) => {
   });
 });
 
-module.exports = { updatePassword, updateGeminiKey, getAccountStatus };
+module.exports = { updatePassword, updateGeminiKey, removeGeminiKey, getAccountStatus };

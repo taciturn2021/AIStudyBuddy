@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { updatePassword, updateGeminiKey, getAccountStatus } from '../services/accountService';
+import { updatePassword, updateGeminiKey, removeGeminiKey, getAccountStatus } from '../services/accountService';
 import LoadingIndicator from '../components/LoadingIndicator';
 
 function AccountPage() {
@@ -84,6 +84,23 @@ function AccountPage() {
     }
   };
 
+  const handleRemoveGeminiKey = async () => {
+    if (!window.confirm('Are you sure you want to remove your Gemini API Key? AI features will be limited without it.')) {
+      return;
+    }
+
+    setGeminiLoading(true);
+    try {
+      const response = await removeGeminiKey();
+      setGeminiMessage({ type: 'success', text: response.message });
+      setIsGeminiKeySet(false);
+    } catch (err) {
+      setGeminiMessage({ type: 'error', text: err.response?.data?.message || 'Failed to remove Gemini API Key' });
+    } finally {
+      setGeminiLoading(false);
+    }
+  };
+
   return (
     <div className="page account-page">
       <Link to="/dashboard" className="btn-back" style={{ marginBottom: '1.5rem' }}>
@@ -160,16 +177,28 @@ function AccountPage() {
               placeholder="Enter your Google AI Studio API Key"
               required
             />
-            <small className="form-text">Your key will be encrypted before storage. Get your key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a>.</small>
+            <small className="form-text">Your key will be encrypted before storage. Get your key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio</a>. (its free!)</small>
           </div>
           {geminiMessage.text && (
             <div className={`alert alert-${geminiMessage.type === 'error' ? 'warning' : 'info'}`}>
               {geminiMessage.text}
             </div>
           )}
-          <button type="submit" disabled={geminiLoading || statusLoading} className={`form-btn-submit ${geminiLoading ? 'loading' : ''}`}>
-            {geminiLoading ? 'Saving...' : 'Save API Key'}
-          </button>
+          <div className="form-buttons">
+            <button type="submit" disabled={geminiLoading || statusLoading} className={`form-btn-submit ${geminiLoading ? 'loading' : ''}`}>
+              {geminiLoading ? 'Saving...' : 'Save API Key'}
+            </button>
+            {isGeminiKeySet && (
+              <button 
+                type="button"
+                onClick={handleRemoveGeminiKey} 
+                disabled={geminiLoading || statusLoading} 
+                className="form-btn-remove"
+              >
+                Remove API Key
+              </button>
+            )}
+          </div>
         </form>
       </div>
       
@@ -216,9 +245,31 @@ function AccountPage() {
           font-size: 0.8rem;
           color: #64748b;
         }
+        .form-buttons {
+          display: flex;
+          gap: 1rem;
+          margin-top: 1rem;
+        }
+        .form-btn-remove {
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s;
+          background-color: #fff;
+          color: #dc2626;
+          border: 1px solid #dc2626;
+        }
+        .form-btn-remove:hover:not(:disabled) {
+          background-color: #fee2e2;
+        }
+        .form-btn-remove:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
       `}</style>
     </div>
   );
 }
 
-export default AccountPage; 
+export default AccountPage;

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const MessageSchema = new mongoose.Schema({
   role: {
     type: String,
-    enum: ['user', 'model', 'system'], // System for potential future use
+    enum: ['user', 'model', 'system'],
     required: true
   },
   content: {
@@ -14,7 +14,7 @@ const MessageSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-}, { _id: false }); // Don't generate separate IDs for embedded messages
+}, { _id: false });
 
 const ChatSchema = new mongoose.Schema({
   notebook: {
@@ -29,7 +29,7 @@ const ChatSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    default: 'New Chat' // Default title, maybe update later
+    default: 'New Chat'
   },
   createdAt: {
     type: Date,
@@ -39,11 +39,10 @@ const ChatSchema = new mongoose.Schema({
      type: Date,
      default: Date.now
   },
-  messages: [MessageSchema] // Embed the message schema
+  messages: [MessageSchema]
 });
 
-// Index for efficient querying by notebook and user
 ChatSchema.index({ notebook: 1, user: 1 });
-ChatSchema.index({ user: 1, lastUpdatedAt: -1 }); // For fetching recent chats
+ChatSchema.index({ user: 1, lastUpdatedAt: -1 });
 
-module.exports = mongoose.model('Chat', ChatSchema); 
+module.exports = mongoose.model('Chat', ChatSchema);

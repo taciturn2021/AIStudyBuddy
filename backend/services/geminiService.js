@@ -21,15 +21,6 @@ async function validateGeminiApiKey(apiKey) {
   }
 }
 
-/**
- * Generates a chat response using the Gemini API.
- * @param {string} apiKey - The user's Gemini API key.
- * @param {string} modelName - The ID of the model to use (e.g., 'gemini-1.5-flash-latest').
- * @param {string} systemInstruction - The system prompt/instruction.
- * @param {Array<object>} history - The chat history (optional). Example: [{role: 'user', parts: [{text: 'Hi'}]}, {role: 'model', parts: [{text: 'Hello!'}]}]
- * @param {string} userPrompt - The user's latest prompt.
- * @returns {Promise<string>} - The generated text response.
- */
 async function generateChatResponse(apiKey, modelName, systemInstruction, history = [], userPrompt) {
   if (!apiKey) {
     throw new Error('API Key is required for chat generation.');
@@ -48,10 +39,9 @@ async function generateChatResponse(apiKey, modelName, systemInstruction, histor
     const model = genAI.getGenerativeModel({
       model: modelName,
       systemInstruction: {
-        role: "system", // Role should likely be system or user based on API needs
+        role: "system",
         parts: [{ text: systemInstruction }],
       },
-      // Add safety settings if needed - example below
       safetySettings: [
         {
           category: HarmCategory.HARM_CATEGORY_HARASSMENT,
@@ -73,9 +63,8 @@ async function generateChatResponse(apiKey, modelName, systemInstruction, histor
     });
 
     const chat = model.startChat({
-      history: history, // Pass existing history
+      history: history,
       generationConfig: {
-        //maxOutputTokens: 1000, // Optional: configure as needed
       },
     });
 
@@ -87,13 +76,12 @@ async function generateChatResponse(apiKey, modelName, systemInstruction, histor
 
   } catch (error) {
     console.error(`[Gemini Service] Error generating chat response with model ${modelName}:`, error);
-    // Improve error message feedback
     let friendlyMessage = 'Failed to generate AI response.';
     if (error.message.includes('API key not valid')) {
       friendlyMessage = 'Invalid Gemini API Key. Please update it in your account settings.';
     } else if (error.message.includes('quota')) {
       friendlyMessage = 'API quota exceeded. Please check your Gemini account usage.';
-    } else if (error.message.includes('429')) { // Rate limit
+    } else if (error.message.includes('429')) {
         friendlyMessage = 'API rate limit hit. Please wait a moment and try again.';
     } else if (error.response?.promptFeedback?.blockReason) {
         friendlyMessage = `Request blocked due to safety settings: ${error.response.promptFeedback.blockReason}`;
@@ -105,4 +93,4 @@ async function generateChatResponse(apiKey, modelName, systemInstruction, histor
   }
 }
 
-module.exports = { validateGeminiApiKey, generateChatResponse }; 
+module.exports = { validateGeminiApiKey, generateChatResponse };

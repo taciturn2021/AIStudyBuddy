@@ -66,12 +66,12 @@ export const deleteDocument = async (notebookId, documentId) => {
   }
 };
 
-// Save text-based content as a document
+
 export const saveTextDocument = async (notebookId, textData) => {
   try {
-    // textData should be { title: string, content: string }
+    
     const response = await axiosInstance().post(`/${notebookId}/text`, textData);
-    return response.data; // Should return the created document data
+    return response.data; 
   } catch (error) {
     console.error(`Error saving text content to notebook ${notebookId}:`, error);
     throw error;

@@ -8,7 +8,6 @@ import LoadingIndicator from '../components/LoadingIndicator';
 import './AiAssistantPage.css';
 
 const NEW_CHAT_ID = 'new';
-const MESSAGES_BEFORE_TITLE_UPDATE = 10;
 
 function AiAssistantPage({ notebookId }) {
   const [documents, setDocuments] = useState([]);
@@ -175,7 +174,6 @@ function AiAssistantPage({ notebookId }) {
           .then(chatListResponse => {
             setChats(chatListResponse.data || []);
             setSelectedChatId(returnedChatId);
-            generateAndUpdateTitle(returnedChatId, [userMessage, modelMessage], true);
           })
           .catch(err => {
             console.error('Error refetching chats after new chat creation:', err);
@@ -186,12 +184,6 @@ function AiAssistantPage({ notebookId }) {
         setChats(prevChats => prevChats.map(chat =>
           chat._id === currentChatId ? { ...chat, lastUpdatedAt: new Date().toISOString() } : chat
         ).sort((a, b) => new Date(b.lastUpdatedAt) - new Date(a.lastUpdatedAt)));
-        const allMessages = [...messages, userMessage, modelMessage];
-        if (
-            allMessages.length >= MESSAGES_BEFORE_TITLE_UPDATE && 
-            allMessages.length % MESSAGES_BEFORE_TITLE_UPDATE === 0) {
-          generateAndUpdateTitle(currentChatId, allMessages, false);
-        }
       }
 
     } catch (err) {
@@ -203,37 +195,6 @@ function AiAssistantPage({ notebookId }) {
       setIsLoadingChat(false);
     }
   }, [currentInput, isLoadingChat, selectedModel, selectedDocIds, notebookId, selectedChatId, messages]);
-
-  const generateAndUpdateTitle = async (chatId, chatMessages, isFirstMessage) => {
-    if (!chatId) return;
-
-    try {
-      const titlePrompt = isFirstMessage
-        ? `Based on this first message, please generate a concise title (max 4-5 words) that represents what this conversation is about: "${chatMessages[0].content}"`
-        : `Please summarize our conversation so far in a concise title (max 4-5 words). Here's the conversation: ${chatMessages.map(msg => `${msg.role}: ${msg.content}`).join('\n')}`;
-
-      const titlePayload = {
-        prompt: titlePrompt,
-        model: "gemini-2.0-flash",
-        selectedDocumentIds: [],
-        chatId: null,
-        generateTitleOnly: true
-      };
-
-      const titleResponse = await sendChatMessage(notebookId, titlePayload);
-      const newTitle = titleResponse.data.reply.replace(/^Title: |^"|"$/g, '').trim();
-      
-      if (newTitle) {
-        await updateChatTitle(chatId, newTitle);
-        
-        setChats(prevChats => prevChats.map(chat => 
-          chat._id === chatId ? { ...chat, title: newTitle } : chat
-        ));
-      }
-    } catch (err) {
-      console.error('Error generating or updating chat title:', err);
-    }
-  };
 
   const handleSelectChat = (chatId) => {
     if (chatId === selectedChatId) return;
@@ -312,7 +273,6 @@ function AiAssistantPage({ notebookId }) {
         <Link to={`/notebook/${notebookId}`} className="btn-back">
             ← Back to Notebook
         </Link>
-        
         {isEditingTitle && selectedChatId !== NEW_CHAT_ID ? (
           <div className="title-edit-container">
             <input
@@ -335,7 +295,6 @@ function AiAssistantPage({ notebookId }) {
             {selectedChatId !== NEW_CHAT_ID && <span className="edit-title-icon">✎</span>}
           </h1>
         )}
-        
         {selectedChatId !== NEW_CHAT_ID && (
           <button
             className="btn-header-delete"
@@ -398,7 +357,6 @@ function AiAssistantPage({ notebookId }) {
               ))}
             </ul>
           )}
-           {/* Display doc loading error here if not already shown by chat loading error */}
           {sidebarError && documents.length === 0 && <p className="text-danger">{sidebarError.includes('documents') ? sidebarError : 'Failed to load documents.'}</p>}
           <hr />
           <div className="model-selector form-group">
@@ -408,13 +366,12 @@ function AiAssistantPage({ notebookId }) {
               ) : modelsError ? (
                   <p className="text-danger">{modelsError}</p>
               ) : availableModels.length === 0 ? (
-                  <p>No models loaded.</p> // Fallback if no models and no error
+                  <p>No models loaded.</p>
               ) : (
                   <select 
                       id="modelSelect"
                       value={selectedModel}
                       onChange={(e) => setSelectedModel(e.target.value)}
-                      // Disable while models loading OR chat/messages loading
                       disabled={isLoadingModels || isLoadingChat || isLoadingMessages}
                       className="form-control"
                   >
@@ -434,17 +391,14 @@ function AiAssistantPage({ notebookId }) {
                 <div key={index} className={`chat-message ${msg.role}`}>
                   <div className="message-bubble">
                     {msg.role === 'user' ? (
-                      // Display user messages as plain text
                       <div className="message-content">{msg.content}</div>
                     ) : (
-                      // Render model messages with Markdown
                       <div className="markdown-content">
                         <ReactMarkdown 
                           remarkPlugins={[remarkGfm]}
                           components={{
-                            // Override components for styling
-                            a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" {...props} />,
-                            pre: ({node, ...props}) => <pre className="code-block" {...props} />,
+                            a: ({node, ...props}) => <a target="_blank" rel="noopener noreferrer" {...props} />, 
+                            pre: ({node, ...props}) => <pre className="code-block" {...props} />, 
                             code: ({node, inline, ...props}) => 
                               inline ? <code className="inline-code" {...props} /> : <code {...props} />
                           }}
@@ -457,16 +411,13 @@ function AiAssistantPage({ notebookId }) {
                 </div>
               ))
             )}
-            {/* Loading indicator specifically for sending/receiving */}
             {isLoadingChat && (
                 <div className="chat-message model loading">
                     <div className="message-bubble">... thinking ...</div>
                 </div>
             )}
-             {/* Display general chat error if not loading messages */}
             {error && !isLoadingMessages && <div className="alert alert-danger chat-error">{error}</div>}
-             {/* Prompt to start if no messages and not loading */}
-             {messages.length === 0 && !isLoadingMessages && !error && (
+            {messages.length === 0 && !isLoadingMessages && !error && (
                  <div className="chat-message system">
                     <div className="message-bubble">
                         {selectedChatId === NEW_CHAT_ID
@@ -484,7 +435,7 @@ function AiAssistantPage({ notebookId }) {
                  ? `Ask about selected docs (${selectedChatId === NEW_CHAT_ID ? 'new chat' : 'this chat'})...`
                  : `Ask a general question (${selectedChatId === NEW_CHAT_ID ? 'new chat' : 'this chat'})...`}
               rows={3}
-              disabled={isLoadingChat || isLoadingMessages} // Disable input while loading messages or sending
+              disabled={isLoadingChat || isLoadingMessages}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                   handleSendMessage(e);
@@ -497,9 +448,8 @@ function AiAssistantPage({ notebookId }) {
           </form>
         </div>
       </div>
-      {/* Styles moved to AiAssistantPage.css */}
     </div>
   );
 }
 
-export default AiAssistantPage; 
+export default AiAssistantPage;

@@ -840,6 +840,8 @@ button.loading::after {
   transform: translateY(0);
 }
 
+
+
 .notebook-list {
   display: grid;
   gap: 1rem;
@@ -971,6 +973,8 @@ button.loading::after {
   transform: translateY(0);
 }
 
+
+
 .btn-delete {
   background-color: white;
   color: #ef4444;
@@ -987,6 +991,8 @@ button.loading::after {
 .btn-delete:active {
   transform: translateY(0);
 }
+
+
 
 /* Mobile adjustments for notebook cards */
 @media (max-width: 480px) {
@@ -1148,6 +1154,8 @@ button.loading::after {
   transform: translateY(0);
 }
 
+
+
 /* Mobile adjustments for the form */
 @media (max-width: 480px) {
   .create-notebook-form {
@@ -1224,6 +1232,7 @@ button.loading::after {
 .header-right {
   display: flex;
   gap: 0.75rem;
+  align-items: center; /* Vertically align items */
 }
 
 .btn-edit, .btn-save {
@@ -1247,6 +1256,64 @@ button.loading::after {
 
 .btn-edit:active, .btn-save:active {
   transform: translateY(0);
+}
+
+/* Ensure buttons in header take equal space */
+.header-right .btn-save,
+.header-right .btn-cancel {
+  flex: 1; /* Distribute space evenly */
+  text-align: center; /* Ensure text is centered */
+  max-width: 150px; /* Optional: prevent buttons from becoming too wide */
+}
+
+/* Specific style for Cancel button in Notebook Page Header */
+.header-right .btn-cancel {
+  background-color: #f3f4f6; /* Light grey background */
+  color: #374151; /* Dark grey text */
+  border: 1px solid #d1d5db; /* Subtle border */
+  box-shadow: none; /* Remove default shadow if needed */
+  padding: 0.6rem 1.2rem; /* Match save button padding */
+  border-radius: 8px; /* Match save button radius */
+  font-weight: 600; /* Match save button weight */
+  cursor: pointer; /* Standard cursor */
+  transition: all 0.2s; /* Standard transition */
+  font-size: 0.95rem; /* Match save button font size */
+}
+
+.header-right .btn-cancel:hover {
+  background-color: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.header-right .btn-cancel:active {
+  background-color: #d1d5db;
+}
+
+/* Specific style for Cancel button in Notebook Page Header */
+.notebook-page .header-right .btn-cancel {
+  background-color: white;
+  color: #6b7280; /* Tailwind gray-500 */
+  border: 1px solid #d1d5db; /* Tailwind gray-300 */
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: none; /* Remove inherited shadow if any */
+  font-size: 0.95rem;
+}
+
+.notebook-page .header-right .btn-cancel:hover {
+  background-color: #f9fafb; /* Tailwind gray-50 */
+  border-color: #9ca3af; /* Tailwind gray-400 */
+  color: #4b5563; /* Tailwind gray-600 */
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.notebook-page .header-right .btn-cancel:active {
+  transform: translateY(0);
+  background-color: #f3f4f6; /* Tailwind gray-100 */
 }
 
 /* Notebook Info Section - Redesigned */
@@ -1279,10 +1346,21 @@ button.loading::after {
 }
 
 .notebook-description {
+  display: block; /* Ensure it's treated as a block */
   color: #4b5563;
   font-size: 1.05rem;
   line-height: 1.6;
   margin: 0;
+  margin-top: 1rem; /* Add space above description */
+}
+
+/* Force visibility for description paragraph on NotebookPage */
+.notebook-info p.notebook-description {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  opacity: 1 !important;
+  margin-bottom: 1rem; /* Add bottom margin */
 }
 
 .edit-title-input {
@@ -1384,6 +1462,8 @@ button.loading::after {
 .tool-btn:active {
   transform: translateY(0);
 }
+
+
 
 .tool-icon {
   font-size: 1.5rem;
@@ -1776,14 +1856,16 @@ button.loading::after {
   transform: translateY(0);
 }
 
+
+
 .btn-cancel {
-  background-color: white;
-  color: #4b5563;
+  background-color: #f3f4f6; /* Light gray background */
+  color: #1f2937; /* Darker gray text */
   border: 1px solid #d1d5db;
 }
 
 .btn-cancel:hover {
-  background-color: #f9fafb;
+  background-color: #e5e7eb; /* Slightly darker gray on hover */
   border-color: #9ca3af;
   transform: translateY(-2px);
 }
@@ -1791,6 +1873,8 @@ button.loading::after {
 .btn-cancel:active {
   transform: translateY(0);
 }
+
+
 
 /* Mobile adjustments for delete confirmation */
 @media (max-width: 480px) {
@@ -1903,6 +1987,8 @@ button.loading::after {
 .upload-pdf-btn:active, .browse-btn:active {
   transform: translateY(0);
 }
+
+
 
 .file-size-info {
   margin-top: 1rem;
