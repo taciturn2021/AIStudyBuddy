@@ -236,15 +236,102 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .flashcard {
-    height: 250px;
+    height: 280px;
+    margin: 0.75rem 0;
   }
-  
+
+  .flashcard-front, .flashcard-back {
+    padding: 1rem;
+  }
+
+  .flashcard-content h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.75rem;
+    overflow-wrap: break-word;
+  }
+
   .flashcard-content p {
-    font-size: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    overflow-wrap: break-word;
   }
-  
+
+  .flashcard-footer {
+    font-size: 0.75rem;
+    padding-top: 0.75rem;
+  }
+
   .flashcard-controls {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  .prev-card-btn,
+  .next-card-btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.95rem;
+    text-align: center;
+  }
+
+  .flashcard-counter {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    order: -1;
+    width: 100%;
+  }
+
+  .delete-card-btn {
+    align-self: center;
+    margin-top: 0.5rem;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  /* Adjustments for flashcard section on notebook page */
+  .flashcard-section {
+    padding: 1rem;
+  }
+
+  .flashcard-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .btn-close-section {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Optional: Further adjustments for very small screens */
+@media (max-width: 480px) {
+  .flashcard {
+    height: auto;
+    min-height: 220px;
+  }
+
+  .flashcard-front, .flashcard-back {
+    padding: 0.75rem;
+  }
+
+  .flashcard-content h3 {
+    font-size: 1rem;
+    overflow-wrap: break-word;
+  }
+
+  .flashcard-content p {
+    font-size: 0.9rem;
+    overflow-wrap: break-word;
+  }
+
+  .flashcard-modal {
+    max-width: 95%;
+    margin: 1rem auto;
+  }
+
+  .modal-section h3 {
+    font-size: 1rem;
   }
 }
 

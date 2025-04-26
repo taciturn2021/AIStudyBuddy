@@ -60,6 +60,29 @@
   overflow: hidden;
   text-overflow: ellipsis;
   flex-grow: 1;
+  margin-right: 0.5rem;
+}
+/* Header Buttons Container */
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+/* Toggle Sidebar Button (Now in Form) */
+.btn-toggle-sidebar {
+  display: none; /* Hidden by default (on desktop) */
+  padding: 0.3rem 0.6rem; /* Smaller padding */
+  font-size: 0.75rem; /* Smaller font */
+  background: #f3f4f6; /* Lighter background */
+  border: 1px solid #e5e7eb;
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-top: 0.5rem; 
+  width: auto; /* Don't force full width */
+  align-self: center; /* Center it */
+}
+.btn-toggle-sidebar:hover {
+  background-color: #e5e7eb;
 }
 /* Header Delete Button */
 .btn-header-delete {
@@ -310,6 +333,7 @@
 }
 /* Chat Input */
 .chat-input-form {
+  flex-shrink: 0;
   display: flex;
   align-items: flex-end;
   padding: 0.75rem 1rem;
@@ -517,4 +541,208 @@
 .message-bubble pre {
   max-width: 100%;
   overflow-x: auto;
+}
+
+/* --- Responsive Design --- */
+
+@media (max-width: 768px) {
+  .ai-assistant-body {
+    flex-direction: column;
+  }
+
+  .chat-sidebar {
+    width: 100%;
+    max-height: 50vh;
+    border-right: none;
+    border-bottom: 1px solid var(--divider-color);
+    order: 2;
+    padding: 0.75rem;
+    overflow-y: auto;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out, border 0.3s ease-out;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .chat-sidebar.collapsed {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    border-bottom: none;
+    flex-shrink: 0;
+  }
+
+  .chat-main {
+    order: 1;
+    min-height: 0;
+  }
+
+  .chat-history {
+    padding: 0.75rem;
+  }
+
+  .chat-list {
+    max-height: 25vh;
+    overflow-y: auto;
+    flex-shrink: 1;
+    margin-bottom: 0.5rem;
+  }
+
+  .document-select-list {
+    max-height: 20vh;
+    overflow-y: auto;
+    flex-shrink: 1;
+  }
+
+  .ai-assistant-header {
+    padding: 0.75rem;
+    justify-content: space-between;
+  }
+
+  .ai-assistant-header .btn-back {
+    flex-shrink: 0;
+  }
+
+  .ai-assistant-header h1 {
+    font-size: 1.1rem;
+    text-align: left;
+    margin-right: 0;
+  }
+
+  .btn-header-delete {
+    width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1rem;
+  }
+
+  .message-bubble {
+    max-width: 90%;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .chat-input-form {
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .chat-input-form textarea {
+    padding: 0.6rem;
+    font-size: 0.95rem;
+    min-height: 2.2rem;
+    margin-right: 0;
+    order: 1;
+    margin-bottom: 0;
+  }
+
+  .chat-input-form button[type="submit"] {
+    width: auto;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    order: 3;
+    margin-left: 0;
+    margin-top: 0;
+  }
+
+  .btn-toggle-sidebar {
+    display: block;
+    order: 2;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .chat-sidebar > *:not(.sidebar-scrollable-content) {
+    flex-shrink: 0;
+  }
+  
+  .btn-new-chat {
+    flex-shrink: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .ai-assistant-header h1.default-title {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-assistant-header {
+    padding: 0.5rem;
+  }
+
+  .ai-assistant-header h1 {
+    font-size: 1rem;
+  }
+
+  .chat-sidebar {
+    padding: 0.5rem;
+  }
+
+  .chat-sidebar h4 {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .btn-new-chat {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .chat-list-item {
+    padding: 0.5rem 0.4rem;
+  }
+
+  .chat-list-item .chat-title {
+    font-size: 0.85rem;
+  }
+
+  .document-select-list label {
+    font-size: 0.8rem;
+  }
+
+  .model-selector select {
+    padding: 0.4rem;
+    font-size: 0.85rem;
+  }
+
+  .chat-history {
+    padding: 0.5rem;
+  }
+
+  .message-bubble {
+    max-width: 92%;
+    font-size: 0.9rem;
+  }
+
+  .chat-input-form textarea {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+    min-height: 2rem;
+  }
+
+  .chat-input-form button[type="submit"] {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-toggle-sidebar {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .chat-list {
+    max-height: 20vh;
+  }
+
+  .document-select-list {
+    max-height: 18vh;
+  }
+
+  .chat-input-form {
+    padding: 0.5rem;
+    gap: 0.4rem;
+  }
 } 

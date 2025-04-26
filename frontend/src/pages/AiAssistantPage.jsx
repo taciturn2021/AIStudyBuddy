@@ -29,6 +29,7 @@ function AiAssistantPage({ notebookId }) {
   const chatHistoryRef = useRef(null);
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [titleInput, setTitleInput] = useState('');
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   useEffect(() => {
     const fetchModels = async () => {
@@ -290,24 +291,29 @@ function AiAssistantPage({ notebookId }) {
             <button onClick={handleCancelTitleEdit} className="title-cancel-btn">Cancel</button>
           </div>
         ) : (
-          <h1 onClick={selectedChatId !== NEW_CHAT_ID ? handleStartTitleEdit : undefined} className={selectedChatId !== NEW_CHAT_ID ? "editable-title" : ""}>
+          <h1 
+            onClick={selectedChatId !== NEW_CHAT_ID ? handleStartTitleEdit : undefined} 
+            className={`${selectedChatId !== NEW_CHAT_ID ? "editable-title" : "default-title"}`}
+          >
             {selectedChatId === NEW_CHAT_ID ? "AI Study Assistant" : currentChatTitle}
             {selectedChatId !== NEW_CHAT_ID && <span className="edit-title-icon">✎</span>}
           </h1>
         )}
-        {selectedChatId !== NEW_CHAT_ID && (
-          <button
-            className="btn-header-delete"
-            onClick={() => handleDeleteChat(selectedChatId)}
-            disabled={isLoadingChats || isLoadingMessages}
-            title="Delete Current Chat"
-          >
-            ×
-          </button>
-        )}
+        <div className="header-buttons">
+          {selectedChatId !== NEW_CHAT_ID && (
+            <button
+              className="btn-header-delete"
+              onClick={() => handleDeleteChat(selectedChatId)}
+              disabled={isLoadingChats || isLoadingMessages}
+              title="Delete Current Chat"
+            >
+              ×
+            </button>
+          )}
+        </div>
       </div>
       <div className="ai-assistant-body">
-        <div className="chat-sidebar">
+        <div className={`chat-sidebar ${isSidebarCollapsed ? 'collapsed' : ''}`}>
           <div className="chat-section-header">
             <h4>Chats</h4>
           </div>
@@ -442,6 +448,13 @@ function AiAssistantPage({ notebookId }) {
                 }
               }}
             />
+            <button 
+              type="button"
+              className="btn-toggle-sidebar"
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+            >
+              {isSidebarCollapsed ? 'Show Options' : 'Hide Options'}
+            </button>
             <button type="submit" disabled={isLoadingChat || isLoadingMessages || !currentInput.trim()}>
               {isLoadingChat ? 'Sending...' : 'Send'}
             </button>
