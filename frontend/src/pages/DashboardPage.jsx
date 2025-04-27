@@ -219,6 +219,21 @@ const styles = `
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 .header-actions {
@@ -253,6 +268,25 @@ const styles = `
   align-items: center;
   margin-bottom: 1.5rem;
   position: relative;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 480px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .section-header h2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .btn-create {
+    width: 100%;
+    text-align: center;
+    max-width: none;
+  }
 }
 
 .section-header h2 {

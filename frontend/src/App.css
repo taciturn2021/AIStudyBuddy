@@ -551,6 +551,44 @@ button.loading::after {
   }
 }
 
+@media (max-width: 400px) {
+  .greeting-card {
+    padding: 1rem 0.75rem;
+  }
+  
+  .greeting-card h2 {
+    font-size: 1.3rem;
+  }
+  
+  .greeting-card p {
+    font-size: 0.9rem;
+  }
+  
+  .dashboard-container {
+    padding: 1rem 0.75rem;
+  }
+  
+  .api-key-warning {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+  
+  .warning-icon {
+    font-size: 1.25rem;
+    margin-right: 0.75rem;
+  }
+  
+  .warning-content h3 {
+    font-size: 1rem;
+  }
+  
+  .header-account-btn,
+  .header-logout-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
 /* Header with logout button for dashboard */
 .dashboard-header {
   display: flex;
@@ -1651,8 +1689,13 @@ button.loading::after {
 /* Main content layout */
 .main-content {
   display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.features-sidebar {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
 }
 
 /* Features Sidebar */
@@ -1744,10 +1787,12 @@ button.loading::after {
   
   .main-content {
     grid-template-columns: 1fr;
+    gap: 1rem;
   }
   
   .features-sidebar {
     margin-top: 1.5rem;
+    padding: 1.25rem;
   }
   
   .features-list {
@@ -2094,7 +2139,13 @@ button.loading::after {
 }
 
 .modal-body {
-  /* Add any specific styles for the modal body if needed */
+  padding: 1.25rem;
+}
+
+@media (max-width: 480px) {
+  .modal-body {
+    padding: 1rem 0.75rem;
+  }
 }
 
 /* Ensure PDF uploader styles fit well within the modal */
