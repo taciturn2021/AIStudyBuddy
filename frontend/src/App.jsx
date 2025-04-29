@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
+import { Analytics } from "@vercel/analytics/react"; // Import Analytics
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
@@ -51,6 +52,7 @@ function App() {
 
   return (
     <div className="App">
+      <Analytics /> 
       {chatRouteMatch.isMatch ? (
         <PrivateRoute>
           <AiAssistantPage notebookId={chatRouteMatch.notebookId} />
@@ -64,7 +66,7 @@ function App() {
           <QuizPage notebookId={quizRouteMatch.notebookId} />
         </PrivateRoute>
       ) : (
-        <div 
+        <div
           className={`page ${transitionStage}`}
           onAnimationEnd={handleAnimationEnd}
         >
