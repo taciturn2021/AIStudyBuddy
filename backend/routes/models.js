@@ -90,10 +90,8 @@ router.get('/', protect, async (req, res) => {
         const allModels = modelsResponse.models || [];
 
         const allowedDisplayNames = new Set([
-            "Gemini 2.5 Pro Experimental 03-25", 
-            "Gemini 2.0 Flash",                 
-            "Gemini 2.0 Flash-Lite 001",        
-            "Gemini 2.5 Flash Preview 04-17"      
+            "Gemini 2.5 Flash",
+            "Gemini 2.5 Flash-Lite Preview"
         ]);
 
         const availableModels = allModels
