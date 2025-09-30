@@ -54,14 +54,14 @@ if (!fs.existsSync('./backend/uploads')) {
 
 
 
-app.use('/api/auth', authRoutes);
-app.use('/api/notebooks', notebookRoutes);
-app.use('/api/documents', documentRoutes);
-app.use('/api/flashcards', flashcardRoutes);
-app.use('/api/chat', chatRoutes);
-app.use('/api/account', accountRoutes);
-app.use('/api/models', modelRoutes);
-app.use('/api/quizzes', quizRoutes); 
+app.use('/aistudybuddy/api/auth', authRoutes);
+app.use('/aistudybuddy/api/notebooks', notebookRoutes);
+app.use('/aistudybuddy/api/documents', documentRoutes);
+app.use('/aistudybuddy/api/flashcards', flashcardRoutes);
+app.use('/aistudybuddy/api/chat', chatRoutes);
+app.use('/aistudybuddy/api/account', accountRoutes);
+app.use('/aistudybuddy/api/models', modelRoutes);
+app.use('/aistudybuddy/api/quizzes', quizRoutes); 
 
 
 
@@ -70,7 +70,7 @@ try {
   console.log('Attempting to import flashcard routes...');
   const flashcardRoutes = require('./routes/flashcards');
   console.log('Flashcard routes imported successfully:', typeof flashcardRoutes);
-  app.use('/api/flashcards', flashcardRoutes);
+  app.use('/aistudybuddy/api/flashcards', flashcardRoutes);
   console.log('Flashcard routes registered successfully');
 } catch (error) {
   console.error('Error setting up flashcard routes:', error);
