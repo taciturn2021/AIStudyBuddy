@@ -1,5 +1,5 @@
 # AI Study Buddy
-Deployed At: [AI Study Buddy](https://ai-study-buddy-mu.vercel.app)
+Deployed At: [AI Study Buddy](https://bit.ly/4nwaKVB)
 Full Showcase: [Youtube Video](https://www.youtube.com/watch?v=9iTUzofEFoE)
 
 AI Study Buddy is a web application designed to enhance your learning experience by leveraging the power of AI. Upload your study materials, and let the AI help you generate flashcards, create quizzes, and answer your questions about the content.
